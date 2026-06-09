@@ -37,20 +37,24 @@ export default function Navbar() {
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
     e.preventDefault();
+    
+    // Explicitly restore overflow so the browser allows scrolling immediately
+    document.body.style.overflow = "";
     setMobileMenuOpen(false);
-    const element = document.getElementById(targetId);
-    if (element) {
-      const offset = 72; // Nav height
-      const bodyRect = document.body.getBoundingClientRect().top;
-      const elementRect = element.getBoundingClientRect().top;
-      const elementPosition = elementRect - bodyRect;
-      const offsetPosition = elementPosition - offset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth"
-      });
-    }
+    
+    // Give the browser time to paint the overflow change and start closing the menu
+    setTimeout(() => {
+      const element = document.getElementById(targetId);
+      if (element) {
+        const offset = 72; // Nav height
+        const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+        
+        window.scrollTo({
+          top: elementPosition - offset,
+          behavior: "smooth"
+        });
+      }
+    }, 100);
   };
 
   return (
@@ -146,7 +150,7 @@ export default function Navbar() {
         {/* Mobile Hamburger toggle */}
         <button 
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="lg:hidden text-gold hover:text-gold-light justify-self-end p-2 transition-colors focus:outline-none"
+          className="lg:hidden text-gold hover:text-gold-light justify-self-end p-2 transition-colors focus:outline-none cursor-pointer"
           aria-label="Toggle mobile menu"
         >
           {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
