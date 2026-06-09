@@ -14,14 +14,14 @@ export default function AboutSection({ pillars }: AboutSectionProps) {
     whileInView: { opacity: 1, y: 0 },
     viewport: { once: true, margin: "-100px" },
     transition: { duration: 0.7, ease: "easeOut" }
-  };
+  } as const;
 
   const scaleUp = {
     initial: { opacity: 0, scale: 0.95 },
     whileInView: { opacity: 1, scale: 1 },
     viewport: { once: true, margin: "-100px" },
     transition: { duration: 0.8, ease: "easeOut" }
-  };
+  } as const;
 
   return (
     <section id="about" className="py-20 md:py-32 px-6 md:px-12 lg:px-24 max-w-7xl mx-auto border-b border-gold/15 relative z-10 font-sans">
