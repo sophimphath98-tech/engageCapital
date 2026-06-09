@@ -222,6 +222,17 @@ export default function App() {
 
   const [activeProduct, setActiveProduct] = useState<LoanProductItem | null>(null);
 
+  React.useEffect(() => {
+    if (activeProduct) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [activeProduct]);
+
   const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
     e.preventDefault();
     const element = document.getElementById(targetId);
@@ -512,7 +523,7 @@ export default function App() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
             <div className="relative p-6 border border-gold/10 bg-navy-mid/40 rounded-[2px] group hover:border-gold/30 transition-all">
               <div className="absolute top-2 right-4 font-serif text-4xl font-extrabold text-gold/10">01</div>
               <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center text-gold mb-5">
