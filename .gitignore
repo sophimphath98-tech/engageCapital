@@ -9,3 +9,6 @@ coverage/
 
 /src/generated/prisma
 .next/
+out/
+.vercel
+.turbo
