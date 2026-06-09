@@ -8,12 +8,17 @@
     "build": "next build",
     "start": "next start -p 3000 -H 0.0.0.0",
     "clean": "rm -rf .next out dist",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "seed": "prisma db seed"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
     "@fontsource-variable/geist": "^5.2.9",
     "@google/genai": "^2.4.0",
+    "@prisma/client": "^6.19.3",
     "@tailwindcss/postcss": "^4.3.0",
     "@tailwindcss/vite": "^4.1.14",
     "@vitejs/plugin-react": "^5.0.4",
@@ -37,6 +42,7 @@
     "@types/react": "19.2.17",
     "autoprefixer": "^10.4.21",
     "esbuild": "^0.25.0",
+    "prisma": "^6.19.3",
     "tailwindcss": "^4.1.14",
     "tsx": "^4.21.0",
     "typescript": "~5.8.2",

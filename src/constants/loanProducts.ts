@@ -1,0 +1,162 @@
+/**
+ * ============================================================================
+ * File: loanProducts.ts
+ * Author: Atonnydev
+ * Date: 2026-06-09
+ * Component/Module: Loan Products Constants
+ * Description: Static fallback data array for loan products, used in UI before
+ *              database integration is finalized.
+ * ============================================================================
+ */
+import { LoanProductItem } from "@/types";
+
+export const loanProducts: LoanProductItem[] = [
+  {
+    id: "srv-personal",
+    num: "01",
+    name: "Personal Loan",
+    desc: "Fast, reliable cash loans for medical emergencies, travel, education, or household expenditures with zero collateral required.",
+    defaultAmount: 3000,
+    defaultMonths: 12,
+    defaultRate: 12.0,
+    minAmount: 200,
+    maxAmount: 10000,
+    maxTermMonths: 24,
+    interestRate: 12.0,
+    details: [
+      "Unsecured personal credit matching your monthly income cycles",
+      "No security deposits or vehicle title hold requirements",
+      "Repayment schedules fixed to regular monthly calendar dates",
+      "Disbursements instantly routed directly to your preferred bank account"
+    ],
+    requiredDocs: [
+      "Valid National ID card (or passport for residents)",
+      "Latest 3 months of bank statements",
+      "Proof of current residential address (Utility bill or book address)"
+    ],
+    disbursementTime: "In under 2 Hours"
+  },
+  {
+    id: "srv-sme",
+    num: "02",
+    name: "SME Business Loan",
+    desc: "Working capital infusions to replenish retail inventories, finance salary payrolls, or acquire corporate machinery assets.",
+    defaultAmount: 25000,
+    defaultMonths: 24,
+    defaultRate: 9.5,
+    minAmount: 2000,
+    maxAmount: 50000,
+    maxTermMonths: 36,
+    interestRate: 9.5,
+    details: [
+      "Larger capital ceilings structured specifically for registered enterprises",
+      "Amortization schemes customizable around seasonal sales cycles",
+      "Competitive APR starting under 10% to preserve operational cash flow",
+      "Professional loan advisor provided to co-optimize balance sheet metrics"
+    ],
+    requiredDocs: [
+      "Official business patent tax license (or equal registration certificate)",
+      "Company bank ledger logs spanning the prior 6 months",
+      "Simple current income statement (or standard balance sheet)"
+    ],
+    disbursementTime: "Within 24 Hours max"
+  },
+  {
+    id: "srv-payroll",
+    num: "03",
+    name: "Payroll Loan",
+    desc: "Advance salary loans designed for registered blue-collar or white-collar private sector workers experiencing immediate cash strain.",
+    defaultAmount: 1200,
+    defaultMonths: 6,
+    defaultRate: 11.0,
+    minAmount: 200,
+    maxAmount: 5000,
+    maxTermMonths: 12,
+    interestRate: 11.0,
+    details: [
+      "Direct partnership programs with trusted employers across Cambodia",
+      "Simplest document screening criteria for rapid automated processing",
+      "Automatic deduct structures directly connected to company payroll systems",
+      "No prior credit history track record mandated for approval"
+    ],
+    requiredDocs: [
+      "National ID card or equivalent verified passport identification",
+      "Latest employment certificate or official corporate ID card",
+      "Pre-authorized company automated payroll debit agreement"
+    ],
+    disbursementTime: "Instantly (Within 1 Hour)"
+  },
+  {
+    id: "srv-agri",
+    num: "04",
+    name: "Agricultural Loan",
+    desc: "Specially structured credit facilities crafted for local Cambodian farmers to acquire high-yield seeds and fertilizers.",
+    defaultAmount: 8000,
+    defaultMonths: 18,
+    defaultRate: 8.5,
+    minAmount: 500,
+    maxAmount: 15000,
+    maxTermMonths: 24,
+    interestRate: 8.5,
+    details: [
+      "Repayment installments aligned with harvesting schedules",
+      "Extremely low regional rates designed to support rural communities",
+      "Adaptable extensions during unseasonal climatic disasters",
+      "Applicable for solar irrigation pumping systems or green equipment"
+    ],
+    requiredDocs: [
+      "National ID identification matching land parcel owner",
+      "Simple agricultural land user record certificate or lease",
+      "Basic estimate of projected seasonal agricultural crop yields"
+    ],
+    disbursementTime: "Within 2 Business Days"
+  },
+  {
+    id: "srv-emergency",
+    num: "05",
+    name: "Emergency Loan",
+    desc: "Critical same-day financing for sudden medical bills, vehicle breakdowns, or urgent utility repairs, accessible 24/7.",
+    defaultAmount: 800,
+    defaultMonths: 3,
+    defaultRate: 15.0,
+    minAmount: 200,
+    maxAmount: 2000,
+    maxTermMonths: 6,
+    interestRate: 15.0,
+    details: [
+      "Minimal criteria screening prioritizing speed above all else",
+      "100% web uploads with zero physical branch visits required",
+      "Available for processing on weekends and traditional Khmer holidays",
+      "Transparent schedule outlining exact repayments before signing"
+    ],
+    requiredDocs: [
+      "National ID card (or verified smartphone identity)",
+      "Recent 1 month of mobile money transactions ledger (Bakong, Wing, ABA)"
+    ],
+    disbursementTime: "In 30 Minutes"
+  },
+  {
+    id: "srv-green",
+    num: "06",
+    name: "Green Loan",
+    desc: "Eco-friendly low-interest financing for solar panels, electric vehicle purchases, or insulation retrofitting.",
+    defaultAmount: 15000,
+    defaultMonths: 24,
+    defaultRate: 8.0,
+    minAmount: 500,
+    maxAmount: 20000,
+    maxTermMonths: 36,
+    interestRate: 8.0,
+    details: [
+      "Bonus discounts on APR for energy-efficient materials",
+      "Flexible loan repayment schedules up to 36 months",
+      "Direct pre-approval on select EV models with domestic dealers",
+      "Helps domestic SME operations reduce electrical utility costs"
+    ],
+    requiredDocs: [
+      "National ID card and proof of continuous monthly income",
+      "Vendor invoice statement outlining solar setup or EV quotation details"
+    ],
+    disbursementTime: "Within 24 Hours"
+  }
+];

@@ -1,4 +1,13 @@
-import React from "react";
+/**
+ * ============================================================================
+ * File: layout.tsx
+ * Author: Atonnydev
+ * Date: 2026-06-09
+ * Component/Module: Root Layout
+ * Description: Defines the HTML structure, global fonts, and metadata for the application.
+ * ============================================================================
+ */
+import type { Metadata } from "next";
 import "@/index.css";
 
 export const metadata = {
