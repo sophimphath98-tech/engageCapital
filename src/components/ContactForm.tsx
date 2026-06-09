@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Mail, Phone, MapPin, Send, CheckCircle, History, Trash2, ArrowUpRight } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { InquiryFormInput } from "../types";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
 export default function ContactForm() {
   const [form, setForm] = useState<InquiryFormInput>({
@@ -228,31 +232,31 @@ export default function ContactForm() {
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-[0.7rem] font-semibold tracking-wider text-slate uppercase mb-1.5">
+                <Label className="block text-[0.7rem] font-semibold tracking-wider text-slate uppercase mb-1.5">
                   First Name <span className="text-gold">*</span>
-                </label>
-                <input
+                </Label>
+                <Input
                   type="text"
                   placeholder="Sophea"
                   value={form.firstName}
                   onChange={(e) => setForm({ ...form, firstName: e.target.value })}
                   className={`bg-navy border text-white p-3 text-sm focus:outline-none transition-colors w-full rounded-[2px] ${
-                    errors.firstName ? "border-rose-500/50 focus:border-rose-400" : "border-gold/25 focus:border-gold"
+                    errors.firstName ? "border-rose-500/50 focus:border-rose-400 focus-visible:ring-0" : "border-gold/25 focus:border-gold focus-visible:ring-0"
                   }`}
                 />
                 {errors.firstName && <span className="text-[0.68rem] text-rose-400 mt-1 block">{errors.firstName}</span>}
               </div>
               <div>
-                <label className="block text-[0.7rem] font-semibold tracking-wider text-slate uppercase mb-1.5">
+                <Label className="block text-[0.7rem] font-semibold tracking-wider text-slate uppercase mb-1.5">
                   Last Name <span className="text-gold">*</span>
-                </label>
-                <input
+                </Label>
+                <Input
                   type="text"
                   placeholder="Kim"
                   value={form.lastName}
                   onChange={(e) => setForm({ ...form, lastName: e.target.value })}
                   className={`bg-navy border text-white p-3 text-sm focus:outline-none transition-colors w-full rounded-[2px] ${
-                    errors.lastName ? "border-rose-500/50 focus:border-rose-400" : "border-gold/25 focus:border-gold"
+                    errors.lastName ? "border-rose-500/50 focus:border-rose-400 focus-visible:ring-0" : "border-gold/25 focus:border-gold focus-visible:ring-0"
                   }`}
                 />
                 {errors.lastName && <span className="text-[0.68rem] text-rose-400 mt-1 block">{errors.lastName}</span>}
@@ -261,31 +265,31 @@ export default function ContactForm() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-[0.7rem] font-semibold tracking-wider text-slate uppercase mb-1.5">
+                <Label className="block text-[0.7rem] font-semibold tracking-wider text-slate uppercase mb-1.5">
                   Phone Number <span className="text-gold">*</span>
-                </label>
-                <input
+                </Label>
+                <Input
                   type="tel"
                   placeholder="+855 12 345 678"
                   value={form.phone}
                   onChange={(e) => setForm({ ...form, phone: e.target.value })}
                   className={`bg-navy border text-white p-3 text-sm focus:outline-none transition-colors w-full rounded-[2px] ${
-                    errors.phone ? "border-rose-500/50 focus:border-rose-400" : "border-gold/25 focus:border-gold"
+                    errors.phone ? "border-rose-500/50 focus:border-rose-400 focus-visible:ring-0" : "border-gold/25 focus:border-gold focus-visible:ring-0"
                   }`}
                 />
                 {errors.phone && <span className="text-[0.68rem] text-rose-400 mt-1 block">{errors.phone}</span>}
               </div>
               <div>
-                <label className="block text-[0.7rem] font-semibold tracking-wider text-slate uppercase mb-1.5">
+                <Label className="block text-[0.7rem] font-semibold tracking-wider text-slate uppercase mb-1.5">
                   Email Address <span className="text-gold">*</span>
-                </label>
-                <input
+                </Label>
+                <Input
                   type="email"
                   placeholder="sophea@email.com"
                   value={form.email}
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
                   className={`bg-navy border text-white p-3 text-sm focus:outline-none transition-colors w-full rounded-[2px] ${
-                    errors.email ? "border-rose-500/50 focus:border-rose-400" : "border-gold/25 focus:border-gold"
+                    errors.email ? "border-rose-500/50 focus:border-rose-400 focus-visible:ring-0" : "border-gold/25 focus:border-gold focus-visible:ring-0"
                   }`}
                 />
                 {errors.email && <span className="text-[0.68rem] text-rose-400 mt-1 block">{errors.email}</span>}
@@ -294,89 +298,89 @@ export default function ContactForm() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-[0.7rem] font-semibold tracking-wider text-slate uppercase mb-1.5">
+                <Label className="block text-[0.7rem] font-semibold tracking-wider text-slate uppercase mb-1.5">
                   Loan Type <span className="text-gold">*</span>
-                </label>
+                </Label>
                 <select
                   value={form.loanType}
                   onChange={(e) => setForm({ ...form, loanType: e.target.value })}
-                  className={`bg-navy border text-white p-3 text-sm focus:outline-none transition-colors w-full rounded-[2px] ${
+                  className={`bg-navy border border-gold/25 focus:border-gold text-white p-3 text-sm focus:outline-none transition-colors w-full rounded-[2px] ${
                     errors.loanType ? "border-rose-500/50" : "border-gold/25 focus:border-gold"
                   }`}
                 >
-                  <option value="">Select loan type...</option>
-                  <option>Personal Loan</option>
-                  <option>SME Business Loan</option>
-                  <option>Payroll Loan</option>
-                  <option>Agricultural Loan</option>
-                  <option>Emergency Loan</option>
-                  <option>Green Loan</option>
+                  <option value="" className="bg-navy">Select loan type...</option>
+                  <option className="bg-navy">Personal Loan</option>
+                  <option className="bg-navy">SME Business Loan</option>
+                  <option className="bg-navy">Payroll Loan</option>
+                  <option className="bg-navy">Agricultural Loan</option>
+                  <option className="bg-navy">Emergency Loan</option>
+                  <option className="bg-navy">Green Loan</option>
                 </select>
                 {errors.loanType && <span className="text-[0.68rem] text-rose-400 mt-1 block">{errors.loanType}</span>}
               </div>
               <div>
-                <label className="block text-[0.7rem] font-semibold tracking-wider text-slate uppercase mb-1.5">
+                <Label className="block text-[0.7rem] font-semibold tracking-wider text-slate uppercase mb-1.5">
                   Loan Amount (USD) <span className="text-gold">*</span>
-                </label>
+                </Label>
                 <select
                   value={form.loanAmountRange}
                   onChange={(e) => setForm({ ...form, loanAmountRange: e.target.value })}
-                  className={`bg-navy border text-white p-3 text-sm focus:outline-none transition-colors w-full rounded-[2px] ${
+                  className={`bg-navy border border-gold/25 focus:border-gold text-white p-3 text-sm focus:outline-none transition-colors w-full rounded-[2px] ${
                     errors.loanAmountRange ? "border-rose-500/50" : "border-gold/25 focus:border-gold"
                   }`}
                 >
-                  <option value="">Select amount...</option>
-                  <option>$200 – $500</option>
-                  <option>$500 – $2,000</option>
-                  <option>$2,000 – $10,000</option>
-                  <option>$10,000 – $50,000</option>
+                  <option value="" className="bg-navy">Select amount...</option>
+                  <option className="bg-navy">$200 – $500</option>
+                  <option className="bg-navy">$500 – $2,000</option>
+                  <option className="bg-navy">$2,000 – $10,000</option>
+                  <option className="bg-navy">$10,000 – $50,000</option>
                 </select>
                 {errors.loanAmountRange && <span className="text-[0.68rem] text-rose-400 mt-1 block">{errors.loanAmountRange}</span>}
               </div>
             </div>
 
             <div>
-              <label className="block text-[0.7rem] font-semibold tracking-wider text-slate uppercase mb-1.5">
+              <Label className="block text-[0.7rem] font-semibold tracking-wider text-slate uppercase mb-1.5">
                 Employment Status <span className="text-gold">*</span>
-              </label>
+              </Label>
               <select
                 value={form.employmentStatus}
                 onChange={(e) => setForm({ ...form, employmentStatus: e.target.value })}
-                className={`bg-navy border text-white p-3 text-sm focus:outline-none transition-colors w-full rounded-[2px] ${
+                className={`bg-navy border border-gold/25 focus:border-gold text-white p-3 text-sm focus:outline-none transition-colors w-full rounded-[2px] ${
                   errors.employmentStatus ? "border-rose-500/50" : "border-gold/25 focus:border-gold"
                 }`}
               >
-                <option value="">Select status...</option>
-                <option>Salaried Employee</option>
-                <option>Self-Employed / Freelancer</option>
-                <option>Business Owner</option>
-                <option>Farmer / Agri-Worker</option>
-                <option>Other</option>
+                <option value="" className="bg-navy">Select status...</option>
+                <option className="bg-navy">Salaried Employee</option>
+                <option className="bg-navy">Self-Employed / Freelancer</option>
+                <option className="bg-navy">Business Owner</option>
+                <option className="bg-navy">Farmer / Agri-Worker</option>
+                <option className="bg-navy">Other</option>
               </select>
               {errors.employmentStatus && <span className="text-[0.68rem] text-rose-400 mt-1 block">{errors.employmentStatus}</span>}
             </div>
 
             <div>
-              <label className="block text-[0.7rem] font-semibold tracking-wider text-slate uppercase mb-1.5">
+              <Label className="block text-[0.7rem] font-semibold tracking-wider text-slate uppercase mb-1.5">
                 Additional Notes / Message <span className="text-gold">*</span>
-              </label>
-              <textarea
+              </Label>
+              <Textarea
                 placeholder="Briefly describe what you need the loan for..."
                 value={form.message}
                 onChange={(e) => setForm({ ...form, message: e.target.value })}
                 className={`bg-navy border text-white p-3 text-sm focus:outline-none transition-colors w-full h-32 resize-none rounded-[2px] ${
-                  errors.message ? "border-rose-500/50 focus:border-rose-400" : "border-gold/25 focus:border-gold"
+                  errors.message ? "border-rose-500/50 focus:border-rose-400 focus-visible:ring-0" : "border-gold/25 focus:border-gold focus-visible:ring-0"
                 }`}
-              ></textarea>
+              ></Textarea>
               {errors.message && <span className="text-[0.68rem] text-rose-400 mt-1 block">{errors.message}</span>}
             </div>
 
-            <button
+            <Button
               type="submit"
-              className="px-8 py-3.5 bg-gold text-navy font-bold rounded-[2px] text-xs tracking-wider uppercase transition-all duration-150 transform hover:-translate-y-0.5 active:translate-y-0 self-start flex items-center gap-2 group hover:bg-gold-light mt-2 cursor-pointer"
+              className="px-8 py-3.5 bg-gold text-navy font-bold rounded-[2px] text-xs tracking-wider uppercase transition-all duration-150 transform hover:-translate-y-0.5 active:translate-y-0 self-start flex items-center gap-2 group hover:bg-gold-light mt-2 cursor-pointer border-0"
             >
               Submit Application →
-            </button>
+            </Button>
           </form>
 
           {/* Success Dialog overlay */}

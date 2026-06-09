@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { DollarSign, Landmark, TrendingUp, Sparkles, Layers, ArrowUpRight, CheckCircle2 } from "lucide-react";
 import { motion } from "motion/react";
+import { Button } from "@/components/ui/button";
 
 export default function Calculator() {
   const loanTypes = [
@@ -291,13 +292,13 @@ export default function Calculator() {
               </div>
 
               <div className="mt-8 space-y-3">
-                <button
+                <Button
                   onClick={handleApplyToContact}
-                  className="w-full flex items-center justify-center gap-2 text-[0.82rem] font-bold text-navy bg-gold hover:bg-gold-light py-3.5 px-4 rounded-[2px] uppercase tracking-wider transition-all duration-150 transform hover:-translate-y-0.5 active:translate-y-0 shadow-lg cursor-pointer"
+                  className="w-full flex items-center justify-center gap-2 text-[0.82rem] font-bold text-navy bg-gold hover:bg-gold-light py-6 px-4 rounded-[2px] uppercase tracking-wider transition-all duration-150 transform hover:-translate-y-0.5 active:translate-y-0 shadow-lg cursor-pointer h-auto border-0"
                 >
                   Apply Now with Settings
                   <ArrowUpRight className="w-4 h-4 stroke-[2.5]" />
-                </button>
+                </Button>
                 <div className="flex items-center justify-center gap-1.5 text-[0.65rem] text-slate">
                   <CheckCircle2 className="w-3.5 h-3.5 text-gold" />
                   Estimated processing time: under 2 hours
