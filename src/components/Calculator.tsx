@@ -1,92 +1,83 @@
-import { useState, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import { DollarSign, Landmark, TrendingUp, Sparkles, Layers, ArrowUpRight, CheckCircle2 } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
-
-interface Sector {
-  name: string;
-  rate: number; // compound annual rate
-  risk: "Low-Moderate" | "Moderate" | "Moderate-High" | "High";
-  description: string;
-}
+import { motion } from "motion/react";
 
 export default function Calculator() {
-  const sectors: Sector[] = [
-    { 
-      name: "Technology & Fintech", 
-      rate: 0.135, // 13.5%
-      risk: "Moderate-High", 
-      description: "Fastest growing sector with high integration of digital payments among Cambodia's young demographic." 
-    },
-    { 
-      name: "Infrastructure & Logistics", 
-      rate: 0.088, // 8.8%
-      risk: "Low-Moderate", 
-      description: "Backed by multi-billion government initiatives. Solid, resilient capital appreciation with high collateral value." 
-    },
-    { 
-      name: "Agriculture & Agro-tech", 
-      rate: 0.075, // 7.5%
-      risk: "Moderate", 
-      description: "Modernizing crop aggregation, food security exports, and automated supply chains across the Mekong delta." 
-    },
-    { 
-      name: "Commercial Real Estate", 
-      rate: 0.092, // 9.2%
-      risk: "Moderate", 
-      description: "High-yield prime office spaces, mixed-use retail developments, and industrial parks in Phnom Penh & Sihanoukville." 
-    },
-    { 
-      name: "Tourism & Boutique Hospitality", 
-      rate: 0.105, // 10.5%
-      risk: "High", 
-      description: "Post-pandemic resurge in eco-tourism and cultural luxury stays centered in Siem Reap and the coastal islands." 
-    }
+  const loanTypes = [
+    { name: "Personal Loan", minAmount: 200, maxAmount: 10000, defaultRate: 12.0, desc: "Quick cash for health, travel or household needs." },
+    { name: "SME Business Loan", minAmount: 2000, maxAmount: 50000, defaultRate: 9.5, desc: "Boost inventory, payroll, or business scaling operations." },
+    { name: "Payroll Loan", minAmount: 200, maxAmount: 5000, defaultRate: 11.0, desc: "Fast approval for salaried workers using employment letters." },
+    { name: "Agricultural Loan", minAmount: 500, maxAmount: 15000, defaultRate: 8.5, desc: "Flexible repayments adjusted around crop harvesting seasons." },
+    { name: "Emergency Loan", minAmount: 200, maxAmount: 2000, defaultRate: 15.0, desc: "Immediate same-day payout in hours, accessible 24/7." },
+    { name: "Green Loan", minAmount: 500, maxAmount: 20000, defaultRate: 8.0, desc: "Discounted financing for solar installations or EVs." }
   ];
 
-  // Selected State
-  const [selectedSector, setSelectedSector] = useState<number>(0);
-  const [investment, setInvestment] = useState<number>(250000); // Default $250k
-  const [years, setYears] = useState<number>(5);
+  const [selectedTypeIdx, setSelectedTypeIdx] = useState(0);
+  const [amount, setAmount] = useState(5000);
+  const [months, setMonths] = useState(12);
+  const [interestRate, setInterestRate] = useState(14);
 
-  const sector = sectors[selectedSector];
+  const loanType = loanTypes[selectedTypeIdx];
 
-  // Financial Calculations
+  // Recalculate rates dynamically when user switches loan type
+  const handleTypeSelect = (idx: number) => {
+    setSelectedTypeIdx(idx);
+    const targetType = loanTypes[idx];
+    setInterestRate(targetType.defaultRate);
+    // Bind amount safely within limits
+    if (amount < targetType.minAmount) {
+      setAmount(targetType.minAmount);
+    } else if (amount > targetType.maxAmount) {
+      setAmount(targetType.maxAmount);
+    }
+  };
+
   const calculations = useMemo(() => {
-    const p = investment;
-    const r = sector.rate;
-    const t = years;
+    const r = interestRate / 100 / 12;
+    const monthlyPayment = r === 0 
+      ? amount / months 
+      : (amount * r * Math.pow(1 + r, months)) / (Math.pow(1 + r, months) - 1);
     
-    // Compound interest: A = P * (1 + r)^t
-    const futureValue = p * Math.pow(1 + r, t);
-    const profit = futureValue - p;
-    const totalROI = (profit / p) * 100;
-    
-    // Regional comparison rate (e.g. standard regional mature market rate at average 4.5%)
-    const regionalRate = 0.045;
-    const regionalFV = p * Math.pow(1 + regionalRate, t);
-    const cambodiaAlpha = futureValue - regionalFV;
+    const totalPayable = monthlyPayment * months;
+    const totalInterest = totalPayable - amount;
 
     return {
-      futureValue: Math.round(futureValue),
-      profit: Math.round(profit),
-      totalROI: totalROI.toFixed(1),
-      cambodiaAlpha: Math.round(cambodiaAlpha)
+      monthly: Math.round(monthlyPayment),
+      totalInterest: Math.round(totalInterest),
+      totalPayable: Math.round(totalPayable)
     };
-  }, [investment, sector.rate, years]);
+  }, [amount, months, interestRate]);
 
   const handleApplyToContact = () => {
-    // Fill in values for the contact form of the website
+    // Fill in elements of ContactForm dynamically
+    const phoneInput = document.querySelector("#contact input[type='tel']") as HTMLInputElement;
+    const typeSel = document.querySelector("#contact select:nth-of-type(1)") as HTMLSelectElement;
+    const rangeSel = document.querySelector("#contact select:nth-of-type(2)") as HTMLSelectElement;
     const msgInput = document.querySelector("#contact textarea") as HTMLTextAreaElement;
-    const interestSel = document.querySelector("#contact select") as HTMLSelectElement;
-    
-    if (interestSel) {
-      interestSel.value = "Investment Advisory";
+
+    if (typeSel) {
+      // Find matching range or select option that maps to loanType.name
+      typeSel.value = loanType.name;
       const event = new Event('change', { bubbles: true });
-      interestSel.dispatchEvent(event);
+      typeSel.dispatchEvent(event);
     }
-    
+
+    if (rangeSel) {
+      if (amount <= 500) {
+        rangeSel.value = "$200 – $500";
+      } else if (amount <= 2000) {
+        rangeSel.value = "$500 – $2,000";
+      } else if (amount <= 10000) {
+        rangeSel.value = "$2,000 – $10,000";
+      } else {
+        rangeSel.value = "$10,000 – $50,000";
+      }
+      const event = new Event('change', { bubbles: true });
+      rangeSel.dispatchEvent(event);
+    }
+
     if (msgInput) {
-      msgInput.value = `Hello, I processed an estimation using your Growth Calculator.\n\nSector of Interest: ${sector.name}\nIntended Investment: $${investment.toLocaleString()}\nInvestment Horizon: ${years} years\nEstimated Growth Outcome: $${calculations.futureValue.toLocaleString()}\n\nI would like to receive an official PDF report and discuss actual private equity or co-investment offerings in Cambodia.`;
+      msgInput.value = `Hello, I processed an estimation on your digital loan calculator.\n\nLoan Selected: ${loanType.name}\nRequested Sum: $${amount.toLocaleString()} USD\nTerm Duration: ${months} Months\nExpected APR: ${interestRate}%\nEstimated Monthly Return: $${calculations.monthly.toLocaleString()} USD\nTotal Bill: $${calculations.totalPayable.toLocaleString()} USD\n\nPlease initialize approval routing for my account immediately.`;
       msgInput.focus();
     }
 
@@ -97,67 +88,63 @@ export default function Calculator() {
   };
 
   return (
-    <section id="calculator" className="relative text-white py-14 overflow-hidden border-b border-gold/10">
+    <section id="calculator" className="relative text-white py-16 md:py-24 overflow-hidden border-b border-gold/15 bg-navy">
       {/* Decorative vectors */}
       <div className="absolute top-1/2 left-0 w-80 h-80 bg-gold/5 rounded-full filter blur-3xl pointer-events-none -translate-y-1/2"></div>
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-navy-soft/20 rounded-full filter blur-3xl pointer-events-none"></div>
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-navy-mid/30 rounded-full filter blur-3xl pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
         <div className="text-center max-w-2xl mx-auto mb-12">
           <div className="inline-flex items-center gap-2 text-[0.7rem] font-semibold tracking-widest text-gold uppercase mb-3">
             <Sparkles className="w-3.5 h-3.5 text-gold-light" />
-            Interactive Finance Suite
+            Interactive Borrowing Portal
           </div>
           <h2 className="font-serif text-3xl md:text-4xl font-semibold text-white tracking-tight leading-tight">
-            Cambodian Market Growth Estimator
+            Calculate Your Monthly Payments
           </h2>
-          <p className="mt-4 text-sm text-slate leading-relaxed">
-            Project your potential compound returns using historical risk-adjusted yields across prime Cambodian growth sectors. Compare against mature regional markets.
+          <p className="mt-4 text-xs sm:text-sm text-slate leading-relaxed">
+            Configure flexible parameters to estimate your quick micro-financing. Adjust principal, term duration, and select your preferred product below.
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* Inputs Section */}
-          <div className="lg:col-span-7 bg-navy-mid/60 border border-gold/15 p-6 md:p-8 rounded-[4px] backdrop-blur-sm shadow-xl">
-            {/* Step 1: Sector selection */}
-            <div className="mb-6">
-              <label className="block text-[0.72rem] font-semibold tracking-widest text-gold uppercase mb-3.5 flex items-center gap-1.5">
+          <div className="lg:col-span-7 bg-navy-mid/60 border border-gold/15 p-6 md:p-8 rounded-[4px] backdrop-blur-sm shadow-xl space-y-6">
+            
+            {/* Step 1: Select Loan Product */}
+            <div>
+              <label className="block text-[0.72rem] font-semibold tracking-widest text-gold uppercase mb-3 flex items-center gap-1.5">
                 <Layers className="w-3.5 h-3.5 text-gold-light" />
-                1. Select Growth Sector
+                1. Select Loan Product
               </label>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {sectors.map((sec, idx) => (
+                {loanTypes.map((type, idx) => (
                   <button
-                    key={sec.name}
-                    onClick={() => setSelectedSector(idx)}
-                    className={`text-left p-3.5 rounded-[2px] border transition-all duration-300 flex flex-col justify-between ${
-                      selectedSector === idx
+                    key={type.name}
+                    onClick={() => handleTypeSelect(idx)}
+                    className={`text-left p-3.5 rounded-[2px] border transition-all duration-200 flex flex-col justify-between ${
+                      selectedTypeIdx === idx
                         ? "bg-navy-soft/40 border-gold/70 shadow-lg text-white"
                         : "bg-navy/40 border-gold/10 hover:border-gold/30 text-slate hover:text-white"
                     }`}
                   >
                     <div>
-                      <div className="font-serif font-bold text-sm leading-tight mb-1 flex items-center justify-between">
-                        {sec.name}
-                        {selectedSector === idx && <ArrowUpRight className="w-3.5 h-3.5 text-gold" />}
+                      <div className="font-serif font-bold text-xs sm:text-sm leading-tight mb-1 flex items-center justify-between">
+                        {type.name}
+                        {selectedTypeIdx === idx && <ArrowUpRight className="w-3.5 h-3.5 text-gold" />}
                       </div>
-                      <p className="text-[0.72rem] text-slate line-clamp-2 leading-relaxed mt-1">
-                        {sec.description}
+                      <p className="text-[0.7rem] text-slate line-clamp-2 leading-relaxed mt-1">
+                        {type.desc}
                       </p>
                     </div>
-                    <div className="mt-3.5 pt-2 border-t border-gold/5 flex items-center justify-between text-[0.68rem]">
+                    <div className="mt-3 pt-2 border-t border-gold/5 flex items-center justify-between text-[0.65rem]">
                       <span className="text-gold font-semibold font-mono">
-                        {(sec.rate * 100).toFixed(1)}% CAGR
+                        ~{type.defaultRate}% APR
                       </span>
-                      <span className={`px-2 py-0.5 rounded-full font-sans text-[0.62rem] ${
-                        sec.risk === "Low-Moderate" ? "bg-green-500/10 text-green-400" :
-                        sec.risk === "Moderate" ? "bg-blue-500/10 text-blue-400" :
-                        sec.risk === "Moderate-High" ? "bg-amber-500/10 text-amber-400" :
-                        "bg-rose-500/10 text-rose-400"
-                      }`}>
-                        {sec.risk} Risk
+                      <span className="text-slate font-mono">
+                        Max ${type.maxAmount.toLocaleString()}
                       </span>
                     </div>
                   </button>
@@ -166,107 +153,138 @@ export default function Calculator() {
             </div>
 
             {/* Step 2: Amount Selector */}
-            <div className="mb-6">
+            <div>
               <div className="flex justify-between items-center mb-2">
                 <label className="block text-[0.72rem] font-semibold tracking-widest text-gold uppercase flex items-center gap-1.5">
                   <DollarSign className="w-3.5 h-3.5 text-gold-light" />
-                  2. Initial Investment
+                  2. Loan Principal (Amount)
                 </label>
-                <div className="font-mono text-gold-light text-base font-bold bg-navy-soft/30 px-3 py-1 rounded-[2px] border border-gold/10">
-                  ${investment.toLocaleString()} USD
+                <div className="font-mono text-gold-light text-sm font-bold bg-navy-soft/35 px-3 py-1 rounded-[2px] border border-gold/10">
+                  ${amount.toLocaleString()} USD
                 </div>
               </div>
               
               <input
                 type="range"
-                min="50000"
-                max="5000000"
-                step="50000"
-                value={investment}
-                onChange={(e) => setInvestment(parseInt(e.target.value))}
+                min={loanType.minAmount}
+                max={loanType.maxAmount}
+                step={amount > 2000 ? 500 : 100}
+                value={amount}
+                onChange={(e) => setAmount(parseInt(e.target.value))}
                 className="w-full accent-gold h-1.5 bg-navy-soft rounded-lg appearance-none cursor-pointer"
               />
-              <div className="flex justify-between text-[0.65rem] text-slate mt-1.5 font-mono">
-                <span>$50,000</span>
-                <span>$1,000,000</span>
-                <span>$2,500,000</span>
-                <span>$5,000,000</span>
+              <div className="flex justify-between text-[0.62rem] text-slate mt-1.5 font-mono">
+                <span>Min: ${loanType.minAmount.toLocaleString()}</span>
+                <span>Max: ${loanType.maxAmount.toLocaleString()}</span>
               </div>
             </div>
 
-            {/* Step 3: Years Timeline */}
+            {/* Step 3: Terms Slider */}
             <div>
-              <label className="block text-[0.72rem] font-semibold tracking-widest text-gold uppercase mb-3 flex items-center gap-1.5">
-                <TrendingUp className="w-3.5 h-3.5 text-gold-light" />
-                3. Timeline / Holding Period
-              </label>
+              <div className="flex justify-between items-center mb-2">
+                <label className="block text-[0.72rem] font-semibold tracking-widest text-gold uppercase flex items-center gap-1.5">
+                  <TrendingUp className="w-3.5 h-3.5 text-gold-light" />
+                  3. Term Repayment Limit
+                </label>
+                <div className="font-mono text-gold-light text-sm font-bold bg-navy-soft/35 px-3 py-1 rounded-[2px] border border-gold/10">
+                  {months} Months
+                </div>
+              </div>
               
-              <div className="grid grid-cols-4 gap-2">
-                {[3, 5, 8, 10].map((yr) => (
-                  <button
-                    key={yr}
-                    onClick={() => setYears(yr)}
-                    className={`py-3 text-xs font-mono font-semibold tracking-wider uppercase border transition-all duration-200 rounded-[2px] ${
-                      years === yr
-                        ? "bg-gold text-navy font-bold border-gold"
-                        : "bg-navy/40 border-gold/10 text-slate hover:text-white hover:border-gold/30"
-                    }`}
-                  >
-                    {yr} Years
-                  </button>
-                ))}
+              <input
+                type="range"
+                min="3"
+                max="36"
+                step="1"
+                value={months}
+                onChange={(e) => setMonths(parseInt(e.target.value))}
+                className="w-full accent-gold h-1.5 bg-navy-soft rounded-lg appearance-none cursor-pointer"
+              />
+              <div className="flex justify-between text-[0.62rem] text-slate mt-1.5 font-mono">
+                <span>3 Months</span>
+                <span>12 Months</span>
+                <span>24 Months</span>
+                <span>36 Months</span>
+              </div>
+            </div>
+
+            {/* Step 4: APR Rate custom adjustment */}
+            <div>
+              <div className="flex justify-between items-center mb-2">
+                <label className="block text-[0.72rem] font-semibold tracking-widest text-gold uppercase flex items-center gap-1.5">
+                  <Landmark className="w-3.5 h-3.5 text-gold-light" />
+                  4. Adjust Annual Interest Rate (APR)
+                </label>
+                <div className="font-mono text-gold-light text-sm font-bold bg-navy-soft/35 px-3 py-1 rounded-[2px] border border-gold/10">
+                  {interestRate}% APR
+                </div>
+              </div>
+              
+              <input
+                type="range"
+                min="8"
+                max="24"
+                step="0.5"
+                value={interestRate}
+                onChange={(e) => setInterestRate(parseFloat(e.target.value))}
+                className="w-full accent-gold h-1.5 bg-navy-soft rounded-lg appearance-none cursor-pointer"
+              />
+              <div className="flex justify-between text-[0.62rem] text-slate mt-1.5 font-mono">
+                <span>8.0% APR</span>
+                <span>14.0% APR</span>
+                <span>24.0% APR</span>
               </div>
             </div>
 
           </div>
 
-          {/* Results Block */}
-          <div className="lg:col-span-5 flex flex-col gap-6 h-full">
+          {/* Results Side Block */}
+          <div className="lg:col-span-5 flex flex-col gap-6 h-full font-sans">
             
-            <div className="flex-1 bg-gradient-to-b from-navy-mid to-navy/90 border border-gold/25 p-6 md:p-8 rounded-[4px] relative flex flex-col justify-between shadow-2xl">
+            <div className="flex-1 bg-gradient-to-b from-navy-mid to-navy border border-gold/25 p-6 md:p-8 rounded-[4px] relative flex flex-col justify-between shadow-2xl">
               
               {/* Internal design motif */}
               <div className="absolute top-2 right-2 opacity-5 pointer-events-none">
-                <Landmark className="w-32 h-32 text-gold" />
+                <Landmark className="w-32 h-32 text-gold animate-pulse" />
               </div>
 
               <div>
                 <span className="text-[0.65rem] font-semibold tracking-widest text-gold uppercase block mb-1">
-                  Compound Outcomes
+                  Amortized Estimates ({loanType.name})
                 </span>
-                <h3 className="font-serif text-lg font-bold text-white mb-6 border-b border-gold/10 pb-3">
-                  Projected Cap Appreciation
+                <h3 className="font-serif text-base sm:text-lg font-bold text-white mb-6 border-b border-gold/10 pb-3">
+                  Instalment Details
                 </h3>
 
-                <div className="space-y-5">
+                <div className="space-y-6">
                   <div>
-                    <span className="text-xs text-slate block mb-1">Estimated Capital Value ({years} yrs)</span>
-                    <span className="font-serif text-4xl font-bold text-gold-light leading-none block">
-                      ${calculations.futureValue.toLocaleString()}
+                    <span className="text-xs text-slate block mb-1 uppercase tracking-wider">Estimated Monthly Repayment</span>
+                    <span className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-gold-light leading-none block">
+                      ${calculations.monthly.toLocaleString()} <span className="text-xs sm:text-sm font-sans font-medium text-slate">USD / mo</span>
                     </span>
                   </div>
 
                   <div className="grid grid-cols-2 gap-4 pt-1 border-t border-gold/5 mt-4">
                     <div>
-                      <span className="text-[0.68rem] text-slate block mb-0.5">Total Profit Gain</span>
-                      <span className="font-mono text-sm font-semibold text-emerald-400">
-                        +${calculations.profit.toLocaleString()}
+                      <span className="text-[0.65rem] text-slate block mb-0.5 uppercase tracking-wide">Total Interest Cost</span>
+                      <span className="font-mono text-sm sm:text-base font-bold text-stone-200">
+                        ${calculations.totalInterest.toLocaleString()} USD
                       </span>
                     </div>
                     <div>
-                      <span className="text-[0.68rem] text-slate block mb-0.5 font-sans">Return (ROI)</span>
-                      <span className="font-mono text-sm font-semibold text-emerald-400">
-                        +{calculations.totalROI}%
+                      <span className="text-[0.65rem] text-slate block mb-0.5 uppercase tracking-wide">Total Payable Repay</span>
+                      <span className="font-mono text-sm sm:text-base font-bold text-white">
+                        ${calculations.totalPayable.toLocaleString()} USD
                       </span>
                     </div>
                   </div>
 
                   <div className="p-3 bg-gold/5 border border-gold/10 rounded-[2px] mt-4">
                     <span className="text-[0.65rem] tracking-wide font-semibold text-gold block uppercase mb-1">
-                      The Cambodia Advantage
+                      No Security Deposit Requirement
                     </span>
-                    <p className="text-[0.74rem] text-cream-tint/90 leading-relaxed font-sans">
-                      Your premium yield surplus compared to mature global portfolios is estimated at <strong className="text-gold font-mono">${calculations.cambodiaAlpha.toLocaleString()} USD</strong>, enabled by higher domestic GDP leverage.
+                    <p className="text-[0.72rem] text-stone-300 leading-relaxed font-sans">
+                      Our platform evaluates cash flow cycles natively. Verified applications request no personal collateral holdings, simplifying disbursements.
                     </p>
                   </div>
                 </div>
@@ -277,12 +295,12 @@ export default function Calculator() {
                   onClick={handleApplyToContact}
                   className="w-full flex items-center justify-center gap-2 text-[0.82rem] font-bold text-navy bg-gold hover:bg-gold-light py-3.5 px-4 rounded-[2px] uppercase tracking-wider transition-all duration-150 transform hover:-translate-y-0.5 active:translate-y-0 shadow-lg cursor-pointer"
                 >
-                  Apply Form with Forecast
+                  Apply Now with Settings
                   <ArrowUpRight className="w-4 h-4 stroke-[2.5]" />
                 </button>
                 <div className="flex items-center justify-center gap-1.5 text-[0.65rem] text-slate">
                   <CheckCircle2 className="w-3.5 h-3.5 text-gold" />
-                  Request tailored prospectus based on these settings
+                  Estimated processing time: under 2 hours
                 </div>
               </div>
 

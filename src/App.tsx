@@ -20,190 +20,207 @@ import {
   BookOpen, 
   ArrowUpRight,
   CheckCircle,
-  FileText
+  FileText,
+  Clock,
+  CheckCircle2,
+  Smartphone,
+  Wallet,
+  FileCheck2
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import Navbar from "./components/Navbar";
 import StatsCounter from "./components/StatsCounter";
 import Calculator from "./components/Calculator";
 import ContactForm from "./components/ContactForm";
-import { ServiceItem, PillarItem, FactItem, TeamMember } from "./types";
+import { ServiceItem, PillarItem, FactItem } from "./types";
+
+// Repurposing ServiceItem as LoanProductItem
+interface LoanProductItem {
+  id: string;
+  num: string;
+  name: string;
+  desc: string;
+  defaultAmount: number;
+  defaultMonths: number;
+  defaultRate: number;
+  details: string[];
+  requiredDocs: string[];
+  disbursementTime: string;
+}
 
 export default function App() {
-  // Services details block for interactive popups/modals
-  const services: ServiceItem[] = [
+  const loanProducts: LoanProductItem[] = [
     {
-      id: "srv-advisory",
+      id: "srv-personal",
       num: "01",
-      name: "Investment Advisory",
-      desc: "Strategic guidance for institutional and private investors seeking to enter or expand within the Cambodian and broader ASEAN market.",
+      name: "Personal Loan",
+      desc: "Fast, reliable cash loans for medical emergencies, travel, education, or household expenditures with zero collateral required.",
+      defaultAmount: 3000,
+      defaultMonths: 12,
+      defaultRate: 12.0,
       details: [
-        "In-depth macroeconomic research and risk assessment",
-        "Target identification and cross-border partnership matching",
-        "Commercial feasibility analysis and currency risk modeling",
-        "Local business regulatory alignment and FDI routing setup"
+        "Unsecured personal credit matching your monthly income cycles",
+        "No security deposits or vehicle title hold requirements",
+        "Repayment schedules fixed to regular monthly calendar dates",
+        "Disbursements instantly routed directly to your preferred bank account"
       ],
-      caseStudy: "Advised an East Asian sovereign wealth group on a $74M logistics terminal acquisition along the Phnom Penh autonomous port corridor."
+      requiredDocs: [
+        "Valid National ID card (or passport for residents)",
+        "Latest 3 months of bank statements",
+        "Proof of current residential address (Utility bill or book address)"
+      ],
+      disbursementTime: "In under 2 Hours"
     },
     {
-      id: "srv-corp-finance",
+      id: "srv-sme",
       num: "02",
-      name: "Corporate Finance",
-      desc: "M&A advisory, capital restructuring, due diligence, and financial modeling for companies across all growth stages.",
+      name: "SME Business Loan",
+      desc: "Working capital infusions to replenish retail inventories, finance salary payrolls, or acquire corporate machinery assets.",
+      defaultAmount: 25000,
+      defaultMonths: 24,
+      defaultRate: 9.5,
       details: [
-        "Sell-side and buy-side M&A transaction representation",
-        "Independent valuation report generation and forensic accounting audits",
-        "Strategic capital restructuring for public listings (IPO preparation)",
-        "Due diligence oversight spanning tax, legal, and operational compliance"
+        "Larger capital ceilings structured specifically for registered enterprises",
+        "Amortization schemes customizable around seasonal sales cycles",
+        "Competitive APR starting under 10% to preserve operational cash flow",
+        "Professional loan advisor provided to co-optimize balance sheet metrics"
       ],
-      caseStudy: "Managed the structured merger of two leading domestic consumer retail networks, representing a combined transaction value of $42.5M."
+      requiredDocs: [
+        "Official business patent tax license (or equal registration certificate)",
+        "Company bank ledger logs spanning the prior 6 months",
+        "Simple current income statement (or standard balance sheet)"
+      ],
+      disbursementTime: "Within 24 Hours max"
     },
     {
-      id: "srv-pe",
+      id: "srv-payroll",
       num: "03",
-      name: "Private Equity",
-      desc: "Direct equity investments and co-investment opportunities in high-growth Cambodian businesses across real estate, agriculture, and tech.",
+      name: "Payroll Loan",
+      desc: "Advance salary loans designed for registered blue-collar or white-collar private sector workers experiencing immediate cash strain.",
+      defaultAmount: 1200,
+      defaultMonths: 6,
+      defaultRate: 11.0,
       details: [
-        "Direct equity capital infusion in mid-market enterprises",
-        "Strategic board allocation and direct corporate scaling governance",
-        "Operational process streamlining & tech modernization programs",
-        "Targeted multi-year exit strategy planning and execution"
+        "Direct partnership programs with trusted employers across Cambodia",
+        "Simplest document screening criteria for rapid automated processing",
+        "Automatic deduct structures directly connected to company payroll systems",
+        "No prior credit history track record mandated for approval"
       ],
-      caseStudy: "Acquired a minority stake in a prominent Cambodian renewable bio-fuel refinery, facilitating expansion and a 3.4x rise in output."
+      requiredDocs: [
+        "National ID card or equivalent verified passport identification",
+        "Latest employment certificate or official corporate ID card",
+        "Pre-authorized company automated payroll debit agreement"
+      ],
+      disbursementTime: "Instantly (Within 1 Hour)"
     },
     {
-      id: "srv-debt-capital",
+      id: "srv-agri",
       num: "04",
-      name: "Debt Capital Markets",
-      desc: "Bond issuance support, structured lending, and alternative debt solutions for Cambodian enterprises seeking non-dilutive funding.",
+      name: "Agricultural Loan",
+      desc: "Specially structured credit facilities crafted for local Cambodian farmers to acquire high-yield seeds and fertilizers.",
+      defaultAmount: 8000,
+      defaultMonths: 18,
+      defaultRate: 8.5,
       details: [
-        "Corporate bond structuring, underwriting, and listing on the CSX",
-        "Mezzanine debt and dynamic high-yield convertible note generation",
-        "Syndicated credit facilities coordination with local commercial banks",
-        "Alternative asset-backed security (ABS) tokenization or placement"
+        "Repayment installments aligned with harvesting schedules",
+        "Extremely low regional rates designed to support rural communities",
+        "Adaptable extensions during unseasonal climatic disasters",
+        "Applicable for solar irrigation pumping systems or green equipment"
       ],
-      caseStudy: "Successfully structured and listed Cambodia's first infrastructure-backed green corporate bonds, raising $15M for solar irrigation grids."
+      requiredDocs: [
+        "National ID identification matching land parcel owner",
+        "Simple agricultural land user record certificate or lease",
+        "Basic estimate of projected seasonal agricultural crop yields"
+      ],
+      disbursementTime: "Within 2 Business Days"
     },
     {
-      id: "srv-wealth",
+      id: "srv-emergency",
       num: "05",
-      name: "Wealth Management",
-      desc: "Bespoke portfolio management, estate planning, and multi-asset strategies for high-net-worth individuals and family offices.",
+      name: "Emergency Loan",
+      desc: "Critical same-day financing for sudden medical bills, vehicle breakdowns, or urgent utility repairs, accessible 24/7.",
+      defaultAmount: 800,
+      defaultMonths: 3,
+      defaultRate: 15.0,
       details: [
-        "Personalized multi-asset portfolio advisory and allocation",
-        "Cross-border estate legacy preparation and asset isolation structures",
-        "Offshore capital management and regional real estate placement",
-        "Bespoke family office infrastructure and philanthropic framework setup"
+        "Minimal criteria screening prioritizing speed above all else",
+        "100% web uploads with zero physical branch visits required",
+        "Available for processing on weekends and traditional Khmer holidays",
+        "Transparent schedule outlining exact repayments before signing"
       ],
-      caseStudy: "Supervise the wealth diversification strategy of a major regional family office, shifting 20% allocation to high-yield Mekong growth assets."
+      requiredDocs: [
+        "National ID card (or verified smartphone identity)",
+        "Recent 1 month of mobile money transactions ledger (Bakong, Wing, ABA)"
+      ],
+      disbursementTime: "In 30 Minutes"
     },
     {
-      id: "srv-market-entry",
+      id: "srv-green",
       num: "06",
-      name: "Market Entry Consulting",
-      desc: "End-to-end support for foreign companies establishing a financial or operational presence in Cambodia, from licensing to local partnerships.",
+      name: "Green Loan",
+      desc: "Eco-friendly low-interest financing for solar panels, electric vehicle purchases, or insulation retrofitting.",
+      defaultAmount: 15000,
+      defaultMonths: 24,
+      defaultRate: 8.0,
       details: [
-        "Comprehensive regulatory licensing with MBC, SECC, and CDC",
-        "Tax incentives structuring under the new Cambodian Law on Investment",
-        "Joint venture corporate governance framing and background check investigations",
-        "Executive talent placement and premium local workspace provisioning"
+        "Bonus discounts on APR for energy-efficient materials",
+        "Flexible loan repayment schedules up to 36 months",
+        "Direct pre-approval on select EV models with domestic dealers",
+        "Helps domestic SME operations reduce electrical utility costs"
       ],
-      caseStudy: "Facilitated the compliance-checked market entry of an international fintech unicorn, securing licensed payment gateways in 4 months."
+      requiredDocs: [
+        "National ID card and proof of continuous monthly income",
+        "Vendor invoice statement outlining solar setup or EV quotation details"
+      ],
+      disbursementTime: "Within 24 Hours"
     }
   ];
 
   const pillars: PillarItem[] = [
     {
       id: "pil-1",
-      icon: "🏛",
-      title: "Regulatory Expertise",
-      desc: "Licensed and fully compliant with the National Bank of Cambodia (NBC), the Securities and Exchange Regulator of Cambodia (SERC), and the Council for the Development of Cambodia (CDC)."
+      icon: "⚡",
+      title: "2-Hour Approvals",
+      desc: "Our automated credit routing engine processes verified income fields instantly, transferring funds into your account the same day."
     },
     {
       id: "pil-2",
-      icon: "🌐",
-      title: "International Networks",
-      desc: "Direct access pipeline to institutional private debt funds, sovereign wealth portfolios, and private equity syndicates across Asia, Europe, and the Middle East."
+      icon: "🔒",
+      title: "100% Digitally Secure",
+      desc: "Data-protection rules align with Central Bank guidelines. Sensitive application logs remain securely compartmentalized."
     },
     {
       id: "pil-3",
-      icon: "📈",
-      title: "Data-Driven Decisions",
-      desc: "Proprietary market intelligence models and exhaustive sovereign analysis supporting every private equity investment and due diligence mandate."
+      icon: "🤝",
+      title: "No Collateral Required",
+      desc: "We analyze transaction trends, salary patterns, and cash flow cycles directly, eliminating stressful property title holds."
     }
   ];
 
-  const facts: FactItem[] = [
+  const eligibilityFacts = [
     {
-      id: "fact-1",
-      icon: "TrendingUp",
-      title: "7%+ GDP Growth",
-      body: "Cambodia has maintained some of the strongest, most resilient GDP growth rates in Southeast Asia over the past two decades."
+      icon: <Users className="w-5 h-5 text-gold" />,
+      title: "Age Limit",
+      body: "Applicant must be between 18 and 65 years of age during the active loan period."
     },
     {
-      id: "fact-2",
-      icon: "Globe",
-      title: "ASEAN Gateway",
-      body: "Strategically situated in the center of Thailand, Vietnam, and Laos - linking directly to a consumer market of over 680 million."
+      icon: <Globe className="w-5 h-5 text-gold" />,
+      title: "Residency",
+      body: "Citizens holding a Cambodian National ID Card, or residents with a valid work permit."
     },
     {
-      id: "fact-3",
-      icon: "Coins",
-      title: "Dollarized Economy",
-      body: "Domestic pricing uses USD, effectively removing foreign currency exchange volatilities and facilitating clean, rapid profit repatriation."
+      icon: <Coins className="w-5 h-5 text-gold" />,
+      title: "Income Stream",
+      body: "A continuous verifiable monthly income from employment, business operations, or agricultural yields."
     },
     {
-      id: "fact-4",
-      icon: "Users",
-      title: "Young Demographic",
-      body: "70% of the population is under the age of 30, supporting a highly adaptable workforce, tech adoption, and growing consumer class."
-    },
-    {
-      id: "fact-5",
-      icon: "Building2",
-      title: "Infrastructure Boom",
-      body: "Billions in masterplan investments transforming deep-sea harbors, international airports, expressways, and high-speed fiber."
-    },
-    {
-      id: "fact-6",
-      icon: "Award",
-      title: "Auspicious FDI Policy",
-      body: "One of the world's most unrestricted foreign direct investment frameworks, authorizing 100% foreign equity ownership in most fields."
+      icon: <Smartphone className="w-5 h-5 text-gold" />,
+      title: "Verifiable Identity",
+      body: "An active domestic phone number and valid commercial bank account or Bakong wallet address."
     }
   ];
 
-  const team: TeamMember[] = [
-    {
-      id: "team-1",
-      icon: "👔",
-      name: "Sopheak Chan",
-      role: "Chief Executive Officer",
-      bio: "20+ years of institutional financial command. Former Managing Director at an ASEAN private equity group. Global MBA, INSEAD."
-    },
-    {
-      id: "team-2",
-      icon: "💼",
-      name: "David Lim",
-      role: "Head of Investment Banking",
-      bio: "Over $1.2B in accomplished M&A transactions. Previously associated with Maybank Securities, DBS Singapore, and Deutsche Bank."
-    },
-    {
-      id: "team-3",
-      icon: "📊",
-      name: "Ratanak Prum",
-      role: "Head of Research & Markets",
-      bio: "CFA Charterholder. Specialist in ASEAN fixed income and regional sovereign debt models. PhD in Economics, AIT Bangkok."
-    },
-    {
-      id: "team-4",
-      icon: "🏛",
-      name: "Claire Fontaine",
-      role: "Chief Compliance Officer",
-      bio: "Former regulatory analyst at a French security house. 15+ years overseeing SERC & central bank compliance pipelines in Indochina."
-    }
-  ];
-
-  const [activeService, setActiveService] = useState<ServiceItem | null>(null);
+  const [activeProduct, setActiveProduct] = useState<LoanProductItem | null>(null);
 
   const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
     e.preventDefault();
@@ -222,16 +239,19 @@ export default function App() {
     }
   };
 
-  // Icon mapper helper
-  const renderFactIcon = (iconName: string) => {
-    switch (iconName) {
-      case "TrendingUp": return <TrendingUp className="w-6 h-6 text-gold" />;
-      case "Globe": return <Globe className="w-6 h-6 text-gold" />;
-      case "Coins": return <Coins className="w-6 h-6 text-gold" />;
-      case "Users": return <Users className="w-6 h-6 text-gold" />;
-      case "Building2": return <Building2 className="w-6 h-6 text-gold" />;
-      case "Award": return <Award className="w-6 h-6 text-gold" />;
-      default: return <Sparkles className="w-6 h-6 text-gold" />;
+  // Prefill the loan details inside the interactive calculator
+  const handleCalculateForProduct = (prod: LoanProductItem) => {
+    setActiveProduct(null);
+    
+    // Find sliders in calculator and set them
+    const calculatorSect = document.getElementById("calculator");
+    if (calculatorSect) {
+      // Find the range inputs and programmatically dispatch state.
+      // Since it's nested in a separate component state, we can simulate the apply flow
+      // or guide the user. The click helper in Calculator.tsx can handle it via prefill callback.
+      // But we can trigger the scroll down and prefill via the apply form instantly too.
+      // Let's scroll to the calculator as requested.
+      calculatorSect.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -239,13 +259,13 @@ export default function App() {
     <div className="bg-navy text-text-body font-sans relative selection:bg-gold selection:text-navy overflow-hidden">
       
       {/* ── BACKGROUND WATERMARK / KHMER LATTICE PATTERN ── */}
-      <div className="absolute inset-0 pointer-events-none opacity-[0.03] z-0 overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none opacity-[0.035] z-0 overflow-hidden">
         <svg viewBox="0 0 1600 1200" className="w-full h-full object-cover">
           <defs>
             <pattern id="khmer-latt" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
-              <path d="M40 0 L80 40 L40 80 L0 40 Z" fill="none" stroke="#C9A84C" strokeWidth="1"/>
-              <path d="M40 20 L60 40 L40 60 L20 40 Z" fill="none" stroke="#C9A84C" strokeWidth="0.6"/>
-              <circle cx="40" cy="40" r="4" fill="none" stroke="#C9A84C" strokeWidth="0.8"/>
+              <path d="M40 0 L80 40 L40 80 L0 40 Z" fill="none" stroke="#D4AF37" strokeWidth="1"/>
+              <path d="M40 20 L60 40 L40 60 L20 40 Z" fill="none" stroke="#D4AF37" strokeWidth="0.6"/>
+              <circle cx="40" cy="40" r="4" fill="none" stroke="#D4AF37" strokeWidth="0.8"/>
             </pattern>
           </defs>
           <rect width="100%" height="100%" fill="url(#khmer-latt)"/>
@@ -256,12 +276,12 @@ export default function App() {
       <Navbar />
 
       {/* HERO SECTION */}
-      <section id="home" className="relative min-h-[100vh] flex flex-col justify-center px-6 md:px-12 lg:px-24 pt-[72px] overflow-hidden z-10">
+      <section id="home" className="relative min-h-[100vh] flex flex-col justify-center px-6 md:px-12 lg:px-24 pt-[72px] overflow-hidden z-10 bg-navy">
         
         {/* Dynamic visual light leaks */}
-        <div className="absolute inset-0 z-0 radial-gradient pointer-events-none">
+        <div className="absolute inset-0 z-0 pointer-events-none">
           <div className="absolute top-[20%] right-[-10%] w-[50vw] h-[50vw] bg-gold/[0.04] rounded-full filter blur-[120px]"></div>
-          <div className="absolute bottom-[-10%] left-[-15%] w-[60vw] h-[60vw] bg-navy-mid/[0.9] rounded-full filter blur-[100px]"></div>
+          <div className="absolute bottom-[-10%] left-[-15%] w-[60vw] h-[60vw] bg-navy-mid/[0.8] rounded-full filter blur-[100px]"></div>
         </div>
 
         <div className="max-w-4xl relative z-10 mt-8 mb-12">
@@ -270,10 +290,10 @@ export default function App() {
             initial={{ opacity: 0, x: -15 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-3 text-xs md:text-sm font-semibold tracking-widest text-gold uppercase mb-6"
+            className="inline-flex items-center gap-3 text-xs md:text-sm font-semibold tracking-widest text-gold uppercase mb-6 font-mono"
           >
             <span className="w-8 h-[1px] bg-gold"></span>
-            Phnom Penh · Cambodia · Southeast Asia
+            Bakong Integrated · Instant Approval · Cambodia Wide
           </motion.div>
 
           <motion.h1 
@@ -282,9 +302,9 @@ export default function App() {
             transition={{ duration: 0.8, delay: 0.1 }}
             className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] text-white my-6 tracking-tight"
           >
-            Where <em className="text-gold italic font-normal font-serif">Capital</em> Meets<br />
-            Opportunity in the<br />
-            Kingdom of Wonder
+            Empowering Your <br className="hidden sm:inline" />
+            <em className="text-gold italic font-normal font-serif">Financial Freedom</em> with <br />
+            Instant Digital Loans
           </motion.h1>
 
           <motion.p 
@@ -293,7 +313,7 @@ export default function App() {
             transition={{ duration: 0.8, delay: 0.25 }}
             className="text-base sm:text-lg md:text-xl text-stone-300 font-light max-w-2xl leading-relaxed mb-10"
           >
-            Engage Capital Cambodia is a premier financial advisory and investment firm dedicated to unlocking growth across one of Southeast Asia's most dynamic emerging markets.
+            Engage Capital Cambodia delivers quick, transparent micro-financing with zero physical forms, no security collateral, and automated bank transfers in under 2 hours.
           </motion.p>
 
           <motion.div 
@@ -305,16 +325,16 @@ export default function App() {
             <a 
               href="#contact" 
               onClick={(e) => handleSmoothScroll(e, "contact")}
-              className="px-8 py-4 bg-gold text-navy font-bold rounded-[2px] text-xs md:text-sm uppercase tracking-wide shadow-lg hover:bg-gold-light hover:-translate-y-0.5 active:translate-y-0 transition-all duration-150 cursor-pointer"
+              className="px-8 py-4 bg-gold text-navy font-bold rounded-[2px] text-xs md:text-sm uppercase tracking-wider shadow-lg hover:bg-gold-light hover:-translate-y-0.5 active:translate-y-0 transition-all duration-150 cursor-pointer"
             >
-              Start a Conversation
+              Apply Online Now
             </a>
             <a 
-              href="#services" 
-              onClick={(e) => handleSmoothScroll(e, "services")}
-              className="px-8 py-4 bg-transparent text-cream border border-stone-200/20 hover:border-gold hover:text-gold font-bold rounded-[2px] text-xs md:text-sm uppercase tracking-wide transition-all duration-150 cursor-pointer"
+              href="#calculator" 
+              onClick={(e) => handleSmoothScroll(e, "calculator")}
+              className="px-8 py-4 bg-transparent text-cream border border-stone-200/20 hover:border-gold hover:text-gold font-bold rounded-[2px] text-xs md:text-sm uppercase tracking-wider transition-all duration-150 cursor-pointer"
             >
-              Our Services
+              Try Calculator
             </a>
           </motion.div>
 
@@ -328,7 +348,7 @@ export default function App() {
           className="absolute bottom-10 left-6 md:left-12 lg:left-24 z-10 flex items-center gap-3 text-[10px] sm:text-xs tracking-widest uppercase text-slate"
         >
           <div className="h-10 w-[1px] bg-gradient-to-b from-transparent to-gold animate-pulse"></div>
-          Scroll to explore Cambodia
+          Scroll to explore loan options
         </motion.div>
 
       </section>
@@ -337,24 +357,24 @@ export default function App() {
       <StatsCounter />
 
       {/* ABOUT US SECTION */}
-      <section id="about" className="py-20 md:py-32 px-6 md:px-12 lg:px-24 max-w-7xl mx-auto border-b border-gold/15 relative z-10">
+      <section id="about" className="py-20 md:py-32 px-6 md:px-12 lg:px-24 max-w-7xl mx-auto border-b border-gold/15 relative z-10 font-sans">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           
           {/* Left Block */}
           <div>
-            <div className="inline-flex items-center gap-1.5 text-[0.7rem] font-semibold tracking-widest text-gold uppercase mb-3">
+            <div className="inline-flex items-center gap-1.5 text-[0.7rem] font-semibold tracking-widest text-gold uppercase mb-3 font-mono">
               <span className="w-6 h-[1px] bg-gold block"></span>
-              Who We Are
+              Fast & Secure Lending
             </div>
             
             <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight">
-              Rooted in Cambodia.<br />Connected to the World.
+              Micro-Financing Reimagined for Cambodia
             </h2>
 
-            <div className="width-[48px] h-[2px] bg-gold my-6"></div>
+            <div className="w-[48px] h-[2px] bg-gold my-6"></div>
 
             <p className="text-sm md:text-base text-slate leading-relaxed mb-8">
-              Engage Capital Cambodia Co., Ltd. is built on two decades of deep market expertise and trusted relationships across the Kingdom. We combine local intelligence with international standards to deliver financial solutions that are effective, compliant, and transformative.
+              At Engage Capital Cambodia, we are committed to making financial inclusion simple, dignified, and instant. Our advanced underwriting analytics help individuals, farmers, and small business owners secure quick disbursements without traditional bureaucratic burdens.
             </p>
 
             {/* Pillars */}
@@ -387,30 +407,28 @@ export default function App() {
 
               {/* Circular Mandala Vector Motif */}
               <div className="absolute bottom-[-15%] right-[-15%] pointer-events-none opacity-10 w-[70%] max-w-[280px]">
-                <svg className="w-full h-full text-gold" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <svg className="w-full h-full text-gold animate-spin-slow" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
                   <circle cx="100" cy="100" r="95" fill="none" stroke="currentColor" strokeWidth="2" />
                   <circle cx="100" cy="100" r="70" fill="none" stroke="currentColor" strokeWidth="1.5" />
                   <circle cx="100" cy="100" r="45" fill="none" stroke="currentColor" strokeWidth="1" />
                   <circle cx="100" cy="100" r="20" fill="none" stroke="currentColor" strokeWidth="1" />
                   <line x1="100" y1="5" x2="100" y2="195" stroke="currentColor" strokeWidth="0.8" />
                   <line x1="5" y1="100" x2="195" y2="100" stroke="currentColor" strokeWidth="0.8" />
-                  <line x1="33" y1="33" x2="167" y2="167" stroke="currentColor" strokeWidth="0.6" />
-                  <line x1="167" y1="33" x2="33" y2="167" stroke="currentColor" strokeWidth="0.6" />
                 </svg>
               </div>
 
-              <div className="text-[0.65rem] font-bold tracking-widest text-gold uppercase mb-3">
-                Corporate Mission Statement
+              <div className="text-[0.65rem] font-bold tracking-widest text-gold uppercase mb-3 font-mono">
+                Platform Safety Guarantee
               </div>
               
               <blockquote className="font-serif text-lg md:text-xl lg:text-2xl text-white italic leading-relaxed mb-6 font-medium">
-                "To be Cambodia's most trusted bridge between capital and growth — for investors, entrepreneurs, and the communities we serve."
+                "Our platform processes loan transactions using standard state-level encryption templates, giving Cambodian families safe access to fair credit anytime."
               </blockquote>
 
               <div className="w-10 h-[1px] bg-gold mb-5"></div>
 
               <p className="text-xs text-slate leading-relaxed">
-                We measure success not only in rates of investment return, but in the resilient businesses developed, local talents placed, and economic confidence strengthened across the Kingdom.
+                By integrating micro-finance pipelines directly with modern digital banking rails, we prevent debt spirals and offer completely custom and elastic credit terms.
               </p>
 
             </div>
@@ -420,54 +438,116 @@ export default function App() {
         </div>
       </section>
 
-      {/* SERVICES SECTION */}
+      {/* LOAN PRODUCTS SECTION (repurposing services) */}
       <section id="services" className="bg-navy-mid/80 py-20 md:py-32 relative z-10 border-b border-gold/15">
         <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24">
           
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 md:mb-16">
             <div>
-              <div className="inline-flex items-center gap-1.5 text-[0.7rem] font-semibold tracking-widest text-gold uppercase mb-3">
+              <div className="inline-flex items-center gap-1.5 text-[0.7rem] font-semibold tracking-widest text-gold uppercase mb-3 font-mono">
                 <span className="w-6 h-[1px] bg-gold block"></span>
-                What We Do
+                Select Your Need
               </div>
               <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight mb-2">
-                Our Services
+                Our Digital Loan Products
               </h2>
             </div>
             <p className="text-xs sm:text-sm text-slate md:max-w-xs leading-relaxed">
-              Full-spectrum financial advisory and private equity placement structured to leverage Cambodia's evolving market architecture.
+              Transparent digital lending services explicitly optimized to fulfill personal, business, or farming investments.
             </p>
           </div>
 
-          {/* Services Grid with interactive onClick */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-gold/15 border border-gold/15 overflow-hidden rounded-[2px]">
-            {services.map((srv) => (
+          {/* Services/Products Grid with interactive onClick */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-gold/15 border border-gold/15 overflow-hidden rounded-[2px] font-sans">
+            {loanProducts.map((prod) => (
               <div
-                key={srv.id}
-                onClick={() => setActiveService(srv)}
-                className="bg-navy p-8 md:p-10 relative group hover:bg-navy-soft/30 transition-all duration-300 cursor-pointer flex flex-col justify-between min-h-[240px]"
+                key={prod.id}
+                onClick={() => setActiveProduct(prod)}
+                className="bg-navy p-8 md:p-10 relative group hover:bg-navy-soft/30 transition-all duration-300 cursor-pointer flex flex-col justify-between min-h-[250px]"
               >
                 <div>
                   <div className="flex justify-between items-start mb-6">
                     <span className="font-serif text-4xl font-extrabold text-gold/10 group-hover:text-gold/20 select-none">
-                      {srv.num}
+                      {prod.num}
                     </span>
                     <button className="text-gold/20 group-hover:text-gold group-hover:translate-x-1 group-hover:-translate-y-1 transition-all">
                       <ArrowUpRight className="w-5 h-5" />
                     </button>
                   </div>
-                  <h3 className="font-serif text-base sm:text-lg font-bold text-white mb-3 group-hover:text-gold-light transition-colors">
-                    {srv.name}
+                  <h3 className="font-serif text-base sm:text-lg font-bold text-white mb-2 group-hover:text-gold-light transition-colors">
+                    {prod.name}
                   </h3>
-                  <p className="text-xs sm:text-[0.78rem] text-slate group-hover:text-stone-300 line-clamp-3 leading-relaxed">
-                    {srv.desc}
+                  <p className="text-xs sm:text-[0.78rem] text-slate group-hover:text-stone-300 line-clamp-3 leading-relaxed mb-4">
+                    {prod.desc}
                   </p>
+                  <div className="flex items-center justify-between text-[0.7rem] font-mono text-gold-light bg-navy-mid/60 px-2.5 py-1.5 border border-gold/5 rounded-[2px]">
+                    <span>Rate: ~{prod.defaultRate}% APR</span>
+                    <span>Max: ${prod.defaultAmount.toLocaleString()}</span>
+                  </div>
                 </div>
                 <div className="mt-6 flex items-center gap-1 text-[0.65rem] font-bold text-gold opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-sans tracking-widest uppercase">
-                  Explore Prospectus <ChevronRight className="w-3.5 h-3.5" />
+                  Details & Required Docs <ChevronRight className="w-3.5 h-3.5" />
                 </div>
               </div>
             ))}
+          </div>
+
+        </div>
+      </section>
+
+      {/* HOW IT WORKS SECTION (Interactive structural flow layout) */}
+      <section id="how-it-works" className="py-20 md:py-32 bg-navy border-b border-gold/15 relative z-10 font-sans">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24">
+          
+          <div className="max-w-2xl mb-16">
+            <div className="inline-flex items-center gap-1.5 text-[0.7rem] font-semibold tracking-widest text-gold uppercase mb-3 font-mono">
+              <span className="w-6 h-[1px] bg-gold block"></span>
+              Seamless Onboarding
+            </div>
+            <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight">
+              Simple 4-Step Application
+            </h2>
+            <p className="mt-4 text-xs sm:text-sm text-slate leading-relaxed">
+              No long queues, no stamp papers, no stressful face-to-face screenings. Everything is completed and disbursed digitally.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="relative p-6 border border-gold/10 bg-navy-mid/40 rounded-[2px] group hover:border-gold/30 transition-all">
+              <div className="absolute top-2 right-4 font-serif text-4xl font-extrabold text-gold/10">01</div>
+              <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center text-gold mb-5">
+                <Coins className="w-5 h-5" />
+              </div>
+              <h3 className="font-serif font-bold text-sm text-white mb-2 group-hover:text-gold-light">1. Calculate Terms</h3>
+              <p className="text-[0.74rem] text-slate leading-relaxed">Choose your ideal principal amount and month repayment limits on our custom pricing sliders.</p>
+            </div>
+
+            <div className="relative p-6 border border-gold/10 bg-navy-mid/40 rounded-[2px] group hover:border-gold/30 transition-all">
+              <div className="absolute top-2 right-4 font-serif text-4xl font-extrabold text-gold/10">02</div>
+              <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center text-gold mb-5">
+                <Smartphone className="w-5 h-5" />
+              </div>
+              <h3 className="font-serif font-bold text-sm text-white mb-2 group-hover:text-gold-light">2. Apply in Minutes</h3>
+              <p className="text-[0.74rem] text-slate leading-relaxed font-sans">Fill out basic fields on our encrypted contact portal with zero physical paperwork or documents required.</p>
+            </div>
+
+            <div className="relative p-6 border border-gold/10 bg-navy-mid/40 rounded-[2px] group hover:border-gold/30 transition-all">
+              <div className="absolute top-2 right-4 font-serif text-4xl font-extrabold text-gold/10">03</div>
+              <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center text-gold mb-5">
+                <Clock className="w-5 h-5" />
+              </div>
+              <h3 className="font-serif font-bold text-sm text-white mb-2 group-hover:text-gold-light">3. Get Approved</h3>
+              <p className="text-[0.74rem] text-slate leading-relaxed">Our smart credit analysis pipelines assess and authorize your files in under 2 hours maximum.</p>
+            </div>
+
+            <div className="relative p-6 border border-gold/10 bg-navy-mid/40 rounded-[2px] group hover:border-gold/30 transition-all">
+              <div className="absolute top-2 right-4 font-serif text-4xl font-extrabold text-gold/10">04</div>
+              <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center text-gold mb-5">
+                <Wallet className="w-5 h-5" />
+              </div>
+              <h3 className="font-serif font-bold text-sm text-white mb-2 group-hover:text-gold-light">4. Receive Funds</h3>
+              <p className="text-[0.74rem] text-slate leading-relaxed">The allowed cash is wired directly to your commercial bank balance or mobile Bakong wallet instantly.</p>
+            </div>
           </div>
 
         </div>
@@ -476,25 +556,25 @@ export default function App() {
       {/* CORE FINANCIAL CALCULATOR SUITE */}
       <Calculator />
 
-      {/* WHY INVEST IN CAMBODIA SECTION */}
-      <section id="cambodia" className="py-20 md:py-32 px-6 md:px-12 lg:px-24 max-w-7xl mx-auto border-b border-gold/15 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+      {/* ELIGIBILITY & REQ SECTION */}
+      <section id="eligibility" className="py-20 md:py-32 px-6 md:px-12 lg:px-24 max-w-7xl mx-auto border-b border-gold/15 relative z-10 font-sans">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start animate-fade-in">
           
           {/* Left Description Column */}
           <div className="lg:col-span-5 lg:sticky lg:top-[112px]">
-            <div className="inline-flex items-center gap-1.5 text-[0.7rem] font-semibold tracking-widest text-gold uppercase mb-3">
+            <div className="inline-flex items-center gap-1.5 text-[0.7rem] font-semibold tracking-widest text-gold uppercase mb-3 font-mono">
               <span className="w-6 h-[1px] bg-gold block"></span>
-              The Opportunity
+              Credit Assessment
             </div>
             
             <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight">
-              Why Invest in Cambodia?
+              Pre-Application Criteria
             </h2>
 
-            <div className="width-[48px] h-[2px] bg-gold my-6"></div>
+            <div className="w-[48px] h-[2px] bg-gold my-6"></div>
 
-            <p className="text-sm md:text-base text-slate leading-relaxed mb-8">
-              Cambodia is one of Asia's fastest-growing economies. A young population segment, strategic ASEAN positioning, stable USD dollarized economy, and a pro-business government create a rare confluence of high-impact opportunities.
+            <p className="text-xs sm:text-sm md:text-base text-slate leading-relaxed mb-8">
+              We aim to make our micro-financing packages as inclusive as possible. Before using the digital submission channel, please verify you fulfill the standard requirements listed here.
             </p>
 
             <a 
@@ -502,75 +582,27 @@ export default function App() {
               onClick={(e) => handleSmoothScroll(e, "contact")}
               className="inline-flex items-center gap-2 px-8 py-3.5 bg-gold text-navy font-bold rounded-[2px] text-xs uppercase tracking-wider hover:bg-gold-light transition-colors cursor-pointer"
             >
-              Explore the Market
+              Check My score Now
               <ArrowRight className="w-3.5 h-3.5" />
             </a>
           </div>
 
           {/* Right Fact Grid Column */}
           <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {facts.map((fact) => (
+            {eligibilityFacts.map((fact, idx) => (
               <div 
-                key={fact.id} 
+                key={idx} 
                 className="bg-navy-mid border border-gold/15 p-6 rounded-[2px] transition-all duration-300 hover:border-gold/40 group flex flex-col justify-between"
               >
                 <div>
                   <div className="w-10 h-10 rounded-[2px] bg-navy flex items-center justify-center mb-4 border border-gold/10 group-hover:bg-gold/10 transition-colors">
-                    {renderFactIcon(fact.icon)}
+                    {fact.icon}
                   </div>
                   <h3 className="font-sans font-bold text-xs sm:text-sm text-white mb-2 tracking-wide group-hover:text-gold-light transition-colors">
                     {fact.title}
                   </h3>
-                  <p className="text-[0.76rem] text-slate leading-relaxed">
+                  <p className="text-[0.75rem] text-slate leading-relaxed">
                     {fact.body}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-        </div>
-      </section>
-
-      {/* LEADERSHIP TEAM SECTION */}
-      <section id="team" className="bg-navy-mid/80 py-20 md:py-32 border-b border-gold/15 relative z-10">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24">
-          
-          <div className="max-w-2xl text-left mb-12">
-            <div className="inline-flex items-center gap-1.5 text-[0.7rem] font-semibold tracking-widest text-gold uppercase mb-3">
-              <span className="w-6 h-[1px] bg-gold block"></span>
-              Our People
-            </div>
-            <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight mb-4">
-              Leadership Team
-            </h2>
-            <p className="text-xs sm:text-sm text-slate leading-relaxed">
-              Our partner network combines profound domestic Cambodian intelligence with premium international financial credentials, spanning prominent institutions across Asia, Europe, and North America.
-            </p>
-          </div>
-
-          {/* Team Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {team.map((member) => (
-              <div 
-                key={member.id} 
-                className="bg-navy border border-gold/10 rounded-[2px] p-6 hover:border-gold/30 transition-all duration-300 flex flex-col justify-between"
-              >
-                <div>
-                  {/* Photo surrogate slot */}
-                  <div className="w-20 h-20 bg-navy-mid/80 border-2 border-gold/25 rounded-full flex items-center justify-center mx-auto mb-5 text-3xl shadow-md">
-                    {member.icon}
-                  </div>
-                  <div className="text-center mb-4">
-                    <h3 className="font-serif text-stone-100 font-bold text-base">
-                      {member.name}
-                    </h3>
-                    <div className="text-[10px] text-gold uppercase tracking-widest font-semibold mt-1">
-                      {member.role}
-                    </div>
-                  </div>
-                  <p className="text-stone-400 text-[0.75rem] leading-relaxed text-center font-sans border-t border-gold/5 pt-3.5">
-                    {member.bio}
                   </p>
                 </div>
               </div>
@@ -584,7 +616,7 @@ export default function App() {
       <ContactForm />
 
       {/* COMPLIANT LUXURY FOOTER */}
-      <footer className="bg-[#060E1C] border-t border-gold/10 pt-16 pb-8 text-xs relative z-10">
+      <footer className="bg-[#030A12] border-t border-gold/15 pt-16 pb-8 text-xs relative z-10 font-sans text-slate">
         <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
           
           {/* Brand Col */}
@@ -605,40 +637,40 @@ export default function App() {
                 </div>
               </div>
             </div>
-            <p className="text-slate leading-relaxed max-w-sm text-[0.74rem]">
-              A leading sovereign financial advisory, M&A restructuring, and private equity investment management boutique servicing Cambodia's growing capital markets since 22 March 2009.
+            <p className="leading-relaxed max-w-sm text-[0.74rem]">
+              An authorized digital micro-finance provider streamlining loan principal lines, SME investments, agricultural credits, and short-term advance liquidity across the Kingdom of Cambodia.
             </p>
           </div>
 
           {/* Links 1 */}
           <div>
-            <h4 className="font-bold text-[0.68rem] tracking-widest text-gold uppercase mb-4">
-              Our Capabilities
+            <h4 className="font-bold text-[0.68rem] tracking-widest text-gold uppercase mb-4 font-mono">
+              Loan Products
             </h4>
-            <ul className="space-y-2 text-[0.74rem] text-slate font-medium">
+            <ul className="space-y-2 text-[0.74rem] font-medium">
               <li>
                 <a href="#services" onClick={(e) => handleSmoothScroll(e, "services")} className="hover:text-gold transition-colors block">
-                  Investment Advisory
+                  Personal Cash Loans
                 </a>
               </li>
               <li>
                 <a href="#services" onClick={(e) => handleSmoothScroll(e, "services")} className="hover:text-gold transition-colors block">
-                  Corporate Finance & M&A
+                  SME Business Capital
                 </a>
               </li>
               <li>
                 <a href="#services" onClick={(e) => handleSmoothScroll(e, "services")} className="hover:text-gold transition-colors block">
-                  Private Equity Management
+                  Payroll Advance Line
                 </a>
               </li>
               <li>
                 <a href="#services" onClick={(e) => handleSmoothScroll(e, "services")} className="hover:text-gold transition-colors block">
-                  Debt Capital Markets
+                  Agricultural Crop Credit
                 </a>
               </li>
               <li>
                 <a href="#services" onClick={(e) => handleSmoothScroll(e, "services")} className="hover:text-gold transition-colors block">
-                  Market Entry Licensing
+                  Emergency Same-Day
                 </a>
               </li>
             </ul>
@@ -646,33 +678,33 @@ export default function App() {
 
           {/* Links 2 */}
           <div>
-            <h4 className="font-bold text-[0.68rem] tracking-widest text-gold uppercase mb-4">
-              Company Desk
+            <h4 className="font-bold text-[0.68rem] tracking-widest text-gold uppercase mb-4 font-mono">
+              Navigation Link
             </h4>
-            <ul className="space-y-2 text-[0.74rem] text-slate font-medium">
+            <ul className="space-y-2 text-[0.74rem] font-medium">
               <li>
                 <a href="#about" onClick={(e) => handleSmoothScroll(e, "about")} className="hover:text-gold transition-colors block">
                   About us
                 </a>
               </li>
               <li>
-                <a href="#team" onClick={(e) => handleSmoothScroll(e, "team")} className="hover:text-gold transition-colors block">
-                  Leadership Key
+                <a href="#how-it-works" onClick={(e) => handleSmoothScroll(e, "how-it-works")} className="hover:text-gold transition-colors block">
+                  How It Works
                 </a>
               </li>
               <li>
                 <a href="#calculator" onClick={(e) => handleSmoothScroll(e, "calculator")} className="hover:text-gold transition-colors block">
-                  Capital Estimator
+                  Amortized Calculator
                 </a>
               </li>
               <li>
-                <a href="#cambodia" onClick={(e) => handleSmoothScroll(e, "cambodia")} className="hover:text-gold transition-colors block">
-                  The Opportunity
+                <a href="#eligibility" onClick={(e) => handleSmoothScroll(e, "eligibility")} className="hover:text-gold transition-colors block">
+                  Eligibility Criteria
                 </a>
               </li>
               <li>
                 <a href="#contact" onClick={(e) => handleSmoothScroll(e, "contact")} className="hover:text-gold transition-colors block">
-                  Contact Intake
+                  Apply Online Form
                 </a>
               </li>
             </ul>
@@ -681,22 +713,22 @@ export default function App() {
         </div>
 
         {/* Regulatory fine-print & legal bar */}
-        <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 pt-8 border-t border-stone-800 flex flex-col md:flex-row justify-between items-center gap-4 text-slate text-[0.68rem] leading-relaxed text-center md:text-left">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 pt-8 border-t border-stone-900 flex flex-col md:flex-row justify-between items-center gap-4 text-[0.68rem] leading-relaxed text-center md:text-left">
           <p>
-            © 2026 Engage Capital Cambodia Co., Ltd. All rights reserved. Licensed and regulated by the Securities and Exchange Regulator of Cambodia (SERC) and registered with the Ministry of Commerce of Cambodia.
+            © 2026 Engage Capital Cambodia Co., Ltd. All rights reserved. Managed under state regulatory licenses and registered with the Ministry of Commerce of Cambodia as a digital microfinance advisory platform.
           </p>
-          <div className="flex gap-4 flex-wrap justify-center font-medium">
+          <div className="flex gap-4 flex-wrap justify-center font-medium font-mono text-[0.62rem]">
             <a href="#legal" className="hover:text-gold transition-colors">Privacy Policy</a>
             <a href="#legal" className="hover:text-gold transition-colors">Terms of Corporate Use</a>
-            <a href="#legal" className="hover:text-gold transition-colors">SERC Disclaimer</a>
+            <a href="#legal" className="hover:text-gold transition-colors">NBC Disclaimers</a>
           </div>
         </div>
 
       </footer>
 
-      {/* PROSPECTUS DETAIL MODAL FOR SERVICES OVERLAYS */}
+      {/* DETAIL MODAL FOR LOAN PRODUCTS */}
       <AnimatePresence>
-        {activeService && (
+        {activeProduct && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -708,49 +740,49 @@ export default function App() {
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 15 }}
               transition={{ type: "spring", duration: 0.4 }}
-              className="bg-navy-mid border-2 border-gold max-w-2xl w-full rounded-[4px] overflow-hidden shadow-2xl relative flex flex-col max-h-[90vh]"
+              className="bg-navy-mid border-2 border-gold max-w-2xl w-full rounded-[4px] overflow-hidden shadow-2xl relative flex flex-col max-h-[90vh] font-sans"
             >
               <button 
-                onClick={() => setActiveService(null)}
-                className="absolute top-4 right-4 text-slate hover:text-white p-2 focus:outline-none z-10 transition-colors"
+                onClick={() => setActiveProduct(null)}
+                className="absolute top-4 right-4 text-slate hover:text-white p-2 focus:outline-none z-10 transition-colors cursor-pointer"
                 aria-label="Close dialog"
               >
                 <X className="w-5 h-5" />
               </button>
 
-              <div className="p-6 md:p-8 overflow-y-auto space-y-6">
+              <div className="p-6 md:p-8 overflow-y-auto space-y-6 text-slate text-xs">
                 
                 {/* Header */}
                 <div className="border-b border-gold/15 pb-4">
-                  <span className="font-serif text-4xl block text-gold/30 font-extrabold mb-1">
-                    {activeService.num}
+                  <span className="font-serif text-3xl block text-gold/30 font-extrabold mb-1 font-mono">
+                    {activeProduct.num}
                   </span>
                   <h3 className="font-serif text-xl md:text-2xl font-bold text-white leading-tight">
-                    {activeService.name}
+                    {activeProduct.name}
                   </h3>
-                  <p className="text-slate text-xs mt-1 font-sans tracking-wide uppercase font-semibold">
-                    REGULATION CODE SEC-CAM-{activeService.num}
+                  <p className="text-xs mt-1 font-sans tracking-wide uppercase font-semibold text-gold">
+                    Disbursement cycle: {activeProduct.disbursementTime}
                   </p>
                 </div>
 
                 {/* Description */}
                 <div>
-                  <h4 className="font-bold text-[0.68rem] tracking-widest text-gold uppercase mb-2">
-                    Scope of Capability
+                  <h4 className="font-bold text-[0.68rem] tracking-widest text-gold uppercase mb-2 font-mono">
+                    Product Overview
                   </h4>
                   <p className="text-stone-300 text-sm leading-relaxed">
-                    {activeService.desc}
+                    {activeProduct.desc}
                   </p>
                 </div>
 
                 {/* Bullet Points */}
                 <div>
-                  <h4 className="font-bold text-[0.68rem] tracking-widest text-gold uppercase mb-3.5">
-                    Strategic Mandate Core
+                  <h4 className="font-bold text-[0.68rem] tracking-widest text-gold uppercase mb-3 font-mono">
+                    Key Features
                   </h4>
                   <ul className="space-y-2.5">
-                    {activeService.details.map((point, i) => (
-                      <li key={i} className="flex gap-2.5 items-start text-xs text-stone-400">
+                    {activeProduct.details.map((point, i) => (
+                      <li key={i} className="flex gap-2.5 items-start text-xs text-stone-300">
                         <CheckCircle className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
                         <span className="leading-relaxed">{point}</span>
                       </li>
@@ -758,46 +790,33 @@ export default function App() {
                   </ul>
                 </div>
 
-                {/* Case Study */}
-                <div className="p-4 bg-navy rounded-[2px] border border-gold/10">
-                  <div className="flex items-center gap-1.5 text-gold font-bold text-[0.65rem] uppercase tracking-wider mb-2">
-                    <FileText className="w-4 h-4 text-gold-light" />
-                    Representative Case Study
-                  </div>
-                  <p className="text-xs text-stone-300 leading-relaxed italic">
-                    "{activeService.caseStudy}"
-                  </p>
+                {/* Required Documentation */}
+                <div>
+                  <h4 className="font-bold text-[0.68rem] tracking-widest text-gold uppercase mb-3 font-mono">
+                    Required Upload Files
+                  </h4>
+                  <ul className="space-y-2">
+                    {activeProduct.requiredDocs.map((doc, i) => (
+                      <li key={i} className="flex gap-2.5 items-center text-xs text-stone-300 bg-navy/60 p-2 border border-gold/10 rounded-[2px]">
+                        <FileCheck2 className="w-4 h-4 text-gold flex-shrink-0" />
+                        <span>{doc}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
 
               </div>
 
               {/* Action Bar */}
               <div className="bg-navy border-t border-gold/15 p-4 flex flex-col sm:flex-row justify-between items-center gap-3">
-                <span className="text-[10px] text-slate uppercase tracking-wider text-center sm:text-left">
-                  Schedule direct consultation regarding this prospectus
+                <span className="text-[10px] text-slate uppercase tracking-wider text-center sm:text-left font-sans">
+                  Calculate and prefill this loan's criteria instantly.
                 </span>
                 <button
-                  onClick={() => {
-                    const msgInput = document.querySelector("#contact textarea") as HTMLTextAreaElement;
-                    const interestSel = document.querySelector("#contact select") as HTMLSelectElement;
-                    if (interestSel) {
-                      interestSel.value = activeService.name;
-                      const event = new Event('change', { bubbles: true });
-                      interestSel.dispatchEvent(event);
-                    }
-                    if (msgInput) {
-                      msgInput.value = `Hello, I reviewed the prospectus SEC-CAM-${activeService.num} for "${activeService.name}".\n\nI am particularly interested in the core mandate of: \n- ${activeService.details[0]} \n\nPlease connect me with Sopheak Chan and David Lim regarding custom investment positioning in Cambodia.`;
-                      msgInput.focus();
-                    }
-                    setActiveService(null);
-                    const contactSection = document.getElementById("contact");
-                    if (contactSection) {
-                      contactSection.scrollIntoView({ behavior: "smooth" });
-                    }
-                  }}
+                  onClick={() => handleCalculateForProduct(activeProduct)}
                   className="px-5 py-2 hover:bg-gold-light hover:text-navy cursor-pointer w-full sm:w-auto text-center bg-gold text-navy font-bold text-xs uppercase tracking-wider rounded-[2px]"
                 >
-                  Request Consultation →
+                  Configure Slider & Apply →
                 </button>
               </div>
 

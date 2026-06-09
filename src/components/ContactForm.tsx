@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Mail, Phone, MapPin, Send, CheckCircle, HelpCircle, History, Trash2, ArrowUpRight } from "lucide-react";
+import { Mail, Phone, MapPin, Send, CheckCircle, History, Trash2, ArrowUpRight } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { InquiryFormInput } from "../types";
 
@@ -7,9 +7,11 @@ export default function ContactForm() {
   const [form, setForm] = useState<InquiryFormInput>({
     firstName: "",
     lastName: "",
+    phone: "",
     email: "",
-    company: "",
-    interest: "",
+    loanType: "",
+    loanAmountRange: "",
+    employmentStatus: "",
     message: ""
   });
 
@@ -34,13 +36,20 @@ export default function ContactForm() {
     const newErrors: Partial<InquiryFormInput> = {};
     if (!form.firstName.trim()) newErrors.firstName = "First name is required";
     if (!form.lastName.trim()) newErrors.lastName = "Last name is required";
+    if (!form.phone.trim()) {
+      newErrors.phone = "Phone number is required";
+    } else if (form.phone.length < 8) {
+      newErrors.phone = "Please specify a valid phone number";
+    }
     if (!form.email.trim()) {
       newErrors.email = "Email address is required";
     } else if (!/\S+@\S+\.\S+/.test(form.email)) {
       newErrors.email = "Please specify a valid email address";
     }
-    if (!form.interest) newErrors.interest = "Please select an area of interest";
-    if (!form.message.trim()) newErrors.message = "Message cannot be empty";
+    if (!form.loanType) newErrors.loanType = "Please select a loan type";
+    if (!form.loanAmountRange) newErrors.loanAmountRange = "Please select a loan range";
+    if (!form.employmentStatus) newErrors.employmentStatus = "Please select employment status";
+    if (!form.message.trim()) newErrors.message = "Please tell us what you need the loan for";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -62,9 +71,11 @@ export default function ContactForm() {
       setForm({
         firstName: "",
         lastName: "",
+        phone: "",
         email: "",
-        company: "",
-        interest: "",
+        loanType: "",
+        loanAmountRange: "",
+        employmentStatus: "",
         message: ""
       });
       setErrors({});
@@ -91,17 +102,17 @@ export default function ContactForm() {
           <div>
             <div className="inline-flex items-center gap-1.5 text-[0.7rem] font-semibold tracking-widest text-gold uppercase mb-3">
               <span className="w-6 h-[1px] bg-gold block"></span>
-              Get In Touch
+              Apply Now
             </div>
             
             <h2 className="font-serif text-3xl md:text-4xl font-semibold text-white tracking-tight leading-tight">
-              Start Your Journey with Engage Capital
+              Start Your Loan Application
             </h2>
 
-            <div className="width-[48px] h-[2px] bg-gold my-6"></div>
+            <div className="w-[48px] h-[2px] bg-gold my-6"></div>
 
-            <p className="text-sm md:text-base text-slate leading-relaxed mb-10 max-w-md">
-              Whether you are an international institutional allocator, a private family office seeking exposure, or a domestic high-growth enterprise, we open the complex corridors of Cambodian finance for you.
+            <p className="text-xs sm:text-sm text-slate leading-relaxed mb-10 max-w-md">
+              Fill out the form and one of our loan officers will contact you within 2 hours to guide you through the next steps. Zero upfront fees, 100% digital verification.
             </p>
 
             <div className="space-y-6">
@@ -159,7 +170,7 @@ export default function ContactForm() {
               <div className="flex items-center justify-between mb-2">
                 <span className="font-mono text-[0.68rem] text-gold font-bold tracking-widest uppercase flex items-center gap-1">
                   <History className="w-3.5 h-3.5 text-gold-light" />
-                  Local Inquiry Ledger ({savedInquiries.length})
+                  Local Application Ledger ({savedInquiries.length})
                 </span>
                 <div className="flex gap-2">
                   <button 
@@ -192,8 +203,11 @@ export default function ContactForm() {
                     {savedInquiries.map((inq, idx) => (
                       <div key={idx} className="p-2 border-l-2 border-gold bg-navy/80 space-y-1">
                         <div className="flex justify-between font-mono text-[0.65rem] text-gold-light">
-                          <span>{inq.firstName} {inq.lastName} ({inq.company || "N/A"})</span>
-                          <span className="text-slate">{inq.interest}</span>
+                          <span>{inq.firstName} {inq.lastName} ({inq.phone})</span>
+                          <span className="text-slate">{inq.loanType}</span>
+                        </div>
+                        <div className="text-[0.65rem] text-stone-300">
+                          Range: <span className="text-gold">{inq.loanAmountRange}</span> | Status: <span className="text-gold">{inq.employmentStatus}</span>
                         </div>
                         <p className="text-[0.68rem] font-sans text-stone-300 italic whitespace-pre-wrap leading-normal line-clamp-3">
                           "{inq.message}"
@@ -245,64 +259,109 @@ export default function ContactForm() {
               </div>
             </div>
 
-            <div>
-              <label className="block text-[0.7rem] font-semibold tracking-wider text-slate uppercase mb-1.5">
-                Email Address <span className="text-gold">*</span>
-              </label>
-              <input
-                type="email"
-                placeholder="sophea@company.com"
-                value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
-                className={`bg-navy border text-white p-3 text-sm focus:outline-none transition-colors w-full rounded-[2px] ${
-                  errors.email ? "border-rose-500/50 focus:border-rose-400" : "border-gold/25 focus:border-gold"
-                }`}
-              />
-              {errors.email && <span className="text-[0.68rem] text-rose-400 mt-1 block">{errors.email}</span>}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-[0.7rem] font-semibold tracking-wider text-slate uppercase mb-1.5">
+                  Phone Number <span className="text-gold">*</span>
+                </label>
+                <input
+                  type="tel"
+                  placeholder="+855 12 345 678"
+                  value={form.phone}
+                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                  className={`bg-navy border text-white p-3 text-sm focus:outline-none transition-colors w-full rounded-[2px] ${
+                    errors.phone ? "border-rose-500/50 focus:border-rose-400" : "border-gold/25 focus:border-gold"
+                  }`}
+                />
+                {errors.phone && <span className="text-[0.68rem] text-rose-400 mt-1 block">{errors.phone}</span>}
+              </div>
+              <div>
+                <label className="block text-[0.7rem] font-semibold tracking-wider text-slate uppercase mb-1.5">
+                  Email Address <span className="text-gold">*</span>
+                </label>
+                <input
+                  type="email"
+                  placeholder="sophea@email.com"
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                  className={`bg-navy border text-white p-3 text-sm focus:outline-none transition-colors w-full rounded-[2px] ${
+                    errors.email ? "border-rose-500/50 focus:border-rose-400" : "border-gold/25 focus:border-gold"
+                  }`}
+                />
+                {errors.email && <span className="text-[0.68rem] text-rose-400 mt-1 block">{errors.email}</span>}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-[0.7rem] font-semibold tracking-wider text-slate uppercase mb-1.5">
+                  Loan Type <span className="text-gold">*</span>
+                </label>
+                <select
+                  value={form.loanType}
+                  onChange={(e) => setForm({ ...form, loanType: e.target.value })}
+                  className={`bg-navy border text-white p-3 text-sm focus:outline-none transition-colors w-full rounded-[2px] ${
+                    errors.loanType ? "border-rose-500/50" : "border-gold/25 focus:border-gold"
+                  }`}
+                >
+                  <option value="">Select loan type...</option>
+                  <option>Personal Loan</option>
+                  <option>SME Business Loan</option>
+                  <option>Payroll Loan</option>
+                  <option>Agricultural Loan</option>
+                  <option>Emergency Loan</option>
+                  <option>Green Loan</option>
+                </select>
+                {errors.loanType && <span className="text-[0.68rem] text-rose-400 mt-1 block">{errors.loanType}</span>}
+              </div>
+              <div>
+                <label className="block text-[0.7rem] font-semibold tracking-wider text-slate uppercase mb-1.5">
+                  Loan Amount (USD) <span className="text-gold">*</span>
+                </label>
+                <select
+                  value={form.loanAmountRange}
+                  onChange={(e) => setForm({ ...form, loanAmountRange: e.target.value })}
+                  className={`bg-navy border text-white p-3 text-sm focus:outline-none transition-colors w-full rounded-[2px] ${
+                    errors.loanAmountRange ? "border-rose-500/50" : "border-gold/25 focus:border-gold"
+                  }`}
+                >
+                  <option value="">Select amount...</option>
+                  <option>$200 – $500</option>
+                  <option>$500 – $2,000</option>
+                  <option>$2,000 – $10,000</option>
+                  <option>$10,000 – $50,000</option>
+                </select>
+                {errors.loanAmountRange && <span className="text-[0.68rem] text-rose-400 mt-1 block">{errors.loanAmountRange}</span>}
+              </div>
             </div>
 
             <div>
               <label className="block text-[0.7rem] font-semibold tracking-wider text-slate uppercase mb-1.5">
-                Company / Organization
-              </label>
-              <input
-                type="text"
-                placeholder="Mekong Capital Holdings"
-                value={form.company}
-                onChange={(e) => setForm({ ...form, company: e.target.value })}
-                className="bg-navy border border-gold/25 focus:border-gold text-white p-3 text-sm focus:outline-none transition-colors w-full rounded-[2px]"
-              />
-            </div>
-
-            <div>
-              <label className="block text-[0.7rem] font-semibold tracking-wider text-slate uppercase mb-1.5">
-                Area of Interest <span className="text-gold">*</span>
+                Employment Status <span className="text-gold">*</span>
               </label>
               <select
-                value={form.interest}
-                onChange={(e) => setForm({ ...form, interest: e.target.value })}
+                value={form.employmentStatus}
+                onChange={(e) => setForm({ ...form, employmentStatus: e.target.value })}
                 className={`bg-navy border text-white p-3 text-sm focus:outline-none transition-colors w-full rounded-[2px] ${
-                  errors.interest ? "border-rose-500/50" : "border-gold/25 focus:border-gold"
+                  errors.employmentStatus ? "border-rose-500/50" : "border-gold/25 focus:border-gold"
                 }`}
               >
-                <option value="">Select a service...</option>
-                <option value="Investment Advisory">Investment Advisory</option>
-                <option value="Corporate Finance & M&A">Corporate Finance & M&A</option>
-                <option value="Private Equity">Private Equity Investment</option>
-                <option value="Debt Capital Markets">Debt Capital Markets</option>
-                <option value="Wealth Management">Wealth Management</option>
-                <option value="Market Entry Consulting">Market Entry Consulting</option>
-                <option value="Other">Other General Inquiry</option>
+                <option value="">Select status...</option>
+                <option>Salaried Employee</option>
+                <option>Self-Employed / Freelancer</option>
+                <option>Business Owner</option>
+                <option>Farmer / Agri-Worker</option>
+                <option>Other</option>
               </select>
-              {errors.interest && <span className="text-[0.68rem] text-rose-400 mt-1 block">{errors.interest}</span>}
+              {errors.employmentStatus && <span className="text-[0.68rem] text-rose-400 mt-1 block">{errors.employmentStatus}</span>}
             </div>
 
             <div>
               <label className="block text-[0.7rem] font-semibold tracking-wider text-slate uppercase mb-1.5">
-                Message & Goals <span className="text-gold">*</span>
+                Additional Notes / Message <span className="text-gold">*</span>
               </label>
               <textarea
-                placeholder="Tell us about your strategic goals or intended entry timeline..."
+                placeholder="Briefly describe what you need the loan for..."
                 value={form.message}
                 onChange={(e) => setForm({ ...form, message: e.target.value })}
                 className={`bg-navy border text-white p-3 text-sm focus:outline-none transition-colors w-full h-32 resize-none rounded-[2px] ${
@@ -316,8 +375,7 @@ export default function ContactForm() {
               type="submit"
               className="px-8 py-3.5 bg-gold text-navy font-bold rounded-[2px] text-xs tracking-wider uppercase transition-all duration-150 transform hover:-translate-y-0.5 active:translate-y-0 self-start flex items-center gap-2 group hover:bg-gold-light mt-2 cursor-pointer"
             >
-              Send Secure Inquiry
-              <Send className="w-3.5 h-3.5 stroke-[2.5] transition-transform group-hover:translate-x-0.5" />
+              Submit Application →
             </button>
           </form>
 
@@ -333,9 +391,9 @@ export default function ContactForm() {
                 <div className="w-16 h-16 bg-gold/15 border border-gold/40 rounded-full flex items-center justify-center mb-4 text-gold">
                   <CheckCircle className="w-8 h-8" />
                 </div>
-                <h3 className="font-serif text-xl font-bold text-white mb-2">Inquiry Securely Transmitted</h3>
+                <h3 className="font-serif text-xl font-bold text-white mb-2">Application Received Successfully</h3>
                 <p className="text-slate text-xs max-w-sm leading-relaxed mb-6">
-                  Thank you! Your information was saved successfully in our sandboxed network logs. Our capital desk manager will review and reach out within one business day.
+                  Thank you! Your loan request has been securely stored in your local sandbox browser logs. One of our credit agents will reach out to verify your details in under 2 hours.
                 </p>
                 <button
                   onClick={() => setIsSubmitted(false)}

@@ -72,7 +72,7 @@ export default function Navbar() {
               onClick={(e) => handleNavClick(e, "about")}
               className="text-slate hover:text-gold transition-colors duration-200"
             >
-              About
+              About Us
             </a>
           </li>
           <li>
@@ -81,7 +81,16 @@ export default function Navbar() {
               onClick={(e) => handleNavClick(e, "services")}
               className="text-slate hover:text-gold transition-colors duration-200"
             >
-              Services
+              Loan Products
+            </a>
+          </li>
+          <li>
+            <a 
+              href="#how-it-works" 
+              onClick={(e) => handleNavClick(e, "how-it-works")}
+              className="text-slate hover:text-gold transition-colors duration-200"
+            >
+              How It Works
             </a>
           </li>
           <li>
@@ -95,20 +104,11 @@ export default function Navbar() {
           </li>
           <li>
             <a 
-              href="#cambodia" 
-              onClick={(e) => handleNavClick(e, "cambodia")}
+              href="#eligibility" 
+              onClick={(e) => handleNavClick(e, "eligibility")}
               className="text-slate hover:text-gold transition-colors duration-200"
             >
-              Market
-            </a>
-          </li>
-          <li>
-            <a 
-              href="#team" 
-              onClick={(e) => handleNavClick(e, "team")}
-              className="text-slate hover:text-gold transition-colors duration-200"
-            >
-              Team
+              Eligibility
             </a>
           </li>
           <li>
@@ -117,7 +117,7 @@ export default function Navbar() {
               onClick={(e) => handleNavClick(e, "contact")}
               className="px-5 py-2.5 border border-gold text-gold hover:bg-gold hover:text-navy transition-all duration-200 rounded-[2px]"
             >
-              Contact Us
+              Apply Now
             </a>
           </li>
         </ul>
@@ -149,7 +149,7 @@ export default function Navbar() {
                   onClick={(e) => handleNavClick(e, "about")}
                   className="text-slate hover:text-gold block py-1.5 transition-colors"
                 >
-                  About us
+                  About Us
                 </a>
               </li>
               <li>
@@ -158,7 +158,16 @@ export default function Navbar() {
                   onClick={(e) => handleNavClick(e, "services")}
                   className="text-slate hover:text-gold block py-1.5 transition-colors"
                 >
-                  Our Services
+                  Loan Products
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="#how-it-works" 
+                  onClick={(e) => handleNavClick(e, "how-it-works")}
+                  className="text-slate hover:text-gold block py-1.5 transition-colors"
+                >
+                  How It Works
                 </a>
               </li>
               <li>
@@ -167,25 +176,16 @@ export default function Navbar() {
                   onClick={(e) => handleNavClick(e, "calculator")}
                   className="text-slate hover:text-gold block py-1.5 transition-colors"
                 >
-                  Investment Calculator
+                  Loan Calculator
                 </a>
               </li>
               <li>
                 <a 
-                  href="#cambodia" 
-                  onClick={(e) => handleNavClick(e, "cambodia")}
+                  href="#eligibility" 
+                  onClick={(e) => handleNavClick(e, "eligibility")}
                   className="text-slate hover:text-gold block py-1.5 transition-colors"
                 >
-                  The opportunity
-                </a>
-              </li>
-              <li>
-                <a 
-                  href="#team" 
-                  onClick={(e) => handleNavClick(e, "team")}
-                  className="text-slate hover:text-gold block py-1.5 transition-colors"
-                >
-                  Leadership Team
+                  Eligibility
                 </a>
               </li>
               <li className="mt-2">
@@ -194,7 +194,7 @@ export default function Navbar() {
                   onClick={(e) => handleNavClick(e, "contact")}
                   className="text-center block py-3 border border-gold text-gold hover:bg-gold hover:text-navy transition-all duration-200 rounded-[2px]"
                 >
-                  Contact Us
+                  Apply Now
                 </a>
               </li>
             </ul>

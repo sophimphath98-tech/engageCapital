@@ -5,22 +5,22 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Playfair Display", Georgia, Cambria, "Times New Roman", Times, serif;
 
-  --color-navy: #0A1628;
-  --color-navy-mid: #112240;
-  --color-navy-soft: #1B3460;
-  --color-gold: #C9A84C;
-  --color-gold-light: #E4C97A;
-  --color-cream: #F7F3EC;
-  --color-cream-tint: #F5EDD6;
-  --color-slate: #8898AA;
-  --color-text-body: #CBD5E1;
+  --color-navy: #002D22;
+  --color-navy-mid: #00513C;
+  --color-navy-soft: #007055;
+  --color-gold: #D4AF37;
+  --color-gold-light: #F0CC5A;
+  --color-cream: #F4F9F7;
+  --color-cream-tint: #E6F2EE;
+  --color-slate: #7AADA0;
+  --color-text-body: #B8D8D2;
 }
 
 @layer utilities {
   /* Khmer patterns and background gradients */
   .khmer-pattern-bg {
-    background-image: radial-gradient(ellipse 70% 60% at 80% 50%, rgba(201,168,76,0.07) 0%, transparent 60%),
-                      radial-gradient(ellipse 60% 80% at 10% 80%, rgba(17,34,64,0.9) 0%, transparent 70%);
+    background-image: radial-gradient(ellipse 70% 60% at 80% 50%, rgba(212,175,55,0.07) 0%, transparent 60%),
+                      radial-gradient(ellipse 60% 80% at 10% 80%, rgba(0,45,34,0.9) 0%, transparent 70%);
   }
 
   /* Angkor motif rotation and scale keyframes if any, custom scroll bar */
@@ -28,14 +28,14 @@
     width: 8px;
   }
   ::-webkit-scrollbar-track {
-    background: #0A1628;
+    background: #002D22;
   }
   ::-webkit-scrollbar-thumb {
-    background: #1B3460;
+    background: #007055;
     border-radius: 4px;
-    border: 1px solid #C9A84C;
+    border: 1px solid #D4AF37;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #C9A84C;
+    background: #D4AF37;
   }
 }

@@ -40,8 +40,10 @@ export interface TeamMember {
 export interface InquiryFormInput {
   firstName: string;
   lastName: string;
+  phone: string;
   email: string;
-  company: string;
-  interest: string;
+  loanType: string;
+  loanAmountRange: string;
+  employmentStatus: string;
   message: string;
 }

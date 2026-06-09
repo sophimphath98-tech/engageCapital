@@ -42,15 +42,15 @@ function StatCounterItem({ value, numericValue, suffix, label }: CounterProps) {
     requestAnimationFrame(animateCount);
   }, [isInView, numericValue]);
 
-  // If the number actually contains a decimal value in the visual presentation (like 2.4B+)
+  // If the number actually contains a decimal value in the visual presentation (like 2.4B+ or 4.9★)
   // We can format it cleanly. If value contains a decimal or has custom formatting, we display it, otherwise counts as standard integer
   const renderValue = () => {
     if (value.includes(".")) {
-      // For things like 2.4, if count has completed, show full value, otherwise count first part or format nicely
+      // For things like 4.9 or 2.4, if count has completed, show full value, otherwise count first part or format nicely
       const currentWithDecimal = (count / (numericValue / parseFloat(value))).toFixed(1);
-      return `${parseFloat(currentWithDecimal) >= parseFloat(value) ? value : currentWithDecimal + suffix}`;
+      return `${parseFloat(currentWithDecimal) >= parseFloat(value) ? value : currentWithDecimal}${suffix}`;
     }
-    return `${count}${suffix}`;
+    return `${count.toLocaleString()}${suffix}`;
   };
 
   return (
@@ -73,11 +73,11 @@ function StatCounterItem({ value, numericValue, suffix, label }: CounterProps) {
 
 export default function StatsCounter() {
   const stats = [
-    { id: "1", value: "2.4", numericValue: 24, suffix: "B+", label: "Capital Deployed" },
-    { id: "2", value: "180", numericValue: 180, suffix: "+", label: "Transactions Completed" },
-    { id: "3", value: "15", numericValue: 15, suffix: "+", label: "Years in Cambodia" },
-    { id: "4", value: "40", numericValue: 40, suffix: "+", label: "Portfolio Companies" },
-    { id: "5", value: "98", numericValue: 98, suffix: "%", label: "Client Retention" }
+    { id: "1", value: "120", numericValue: 120, suffix: "M+", label: "Loans Disbursed" },
+    { id: "2", value: "25000", numericValue: 25000, suffix: "+", label: "Borrowers Served" },
+    { id: "3", value: "2", numericValue: 2, suffix: " hrs", label: "Avg. Approval Time" },
+    { id: "4", value: "0", numericValue: 0, suffix: "%", label: "Hidden Fees" },
+    { id: "5", value: "4.9", numericValue: 49, suffix: "★", label: "Customer Rating" }
   ];
 
   return (
